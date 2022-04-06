@@ -46,6 +46,14 @@ namespace rrbot_hardware_interface
 			boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
 			double p_error_, v_error_, e_error_;
 			std::string _logInfo;
+
+        private:
+            hardware_interface::JointStateInterface jnt_state_interface;
+            hardware_interface::PositionJointInterface jnt_pos_interface;
+            double cmd[2];
+            double pos[2];
+            double vel[2];
+            double eff[2];
 	};
 
 } // namespace
