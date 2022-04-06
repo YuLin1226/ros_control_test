@@ -1,5 +1,5 @@
-#ifndef ROS_CONTROL__TR1_HARDWARE_H
-#define ROS_CONTROL__TR1_HARDWARE_H
+#ifndef ROS_CONTROL__RRBOT_HARDWARE_H
+#define ROS_CONTROL__RRBOT_HARDWARE_H
 
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/joint_command_interface.h>
@@ -12,17 +12,16 @@
 #include <boost/scoped_ptr.hpp>
 #include <ros/ros.h>
 
-namespace tr1_hardware_interface
+namespace rrbot_hardware_interface
 {
-	/// \brief Hardware interface for a robot
-	class TR1Hardware : public hardware_interface::RobotHW 
+
+		class RRBOTHardware : public hardware_interface::RobotHW 
 	{
-		/*public:
-			/// \brief Constructor.
-			TR1Hardware();
-			/// \brief Destructor.
-			~TR1Hardware();
-		*/
+		public:
+		
+			RRBOTHardware();	
+			~RRBOTHardware();
+
 		protected:
 
 			// Interfaces
@@ -58,7 +57,5 @@ namespace tr1_hardware_interface
 			std::vector<double>                          joint_effort_limits_;
 
 	}; // class
-
 } // namespace
-
 #endif
