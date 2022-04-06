@@ -12,6 +12,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <ros/ros.h>
 #include "rrbot_hardware.h"
+#include "motor_driver.h"
 
 using namespace hardware_interface;
 using joint_limits_interface::JointLimits;
@@ -46,8 +47,12 @@ namespace rrbot_hardware_interface
 			boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
 			double p_error_, v_error_, e_error_;
 			std::string _logInfo;
+			
 
         private:
+			void serial_setup(std::string port_name, int baud_rate);
+			std::shared_ptr<Motor::MotorDriver> multi_drive_;
+
             hardware_interface::JointStateInterface jnt_state_interface;
             hardware_interface::PositionJointInterface jnt_pos_interface;
             double cmd[2];

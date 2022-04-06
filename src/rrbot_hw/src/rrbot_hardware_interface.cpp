@@ -36,7 +36,7 @@ namespace rrbot_hardware_interface
 
 	void RRBOTHardwareInterface::init()
 	{
-
+		serial_setup("/dev/ttyUSB0", 115200);
         /*
         這邊應該要改 joint name "A" -> "joint1"
         */
@@ -45,6 +45,16 @@ namespace rrbot_hardware_interface
         registerInterface(&jnt_pos_interface);
 
 	}
+
+	void RRBOTHardwareInterface::serial_setup(std::string port_name, int baud_rate)
+	{
+		multi_drive_ = std::make_shared<Motor::MotorDriver>(port_name, baud_rate);
+		multi_drive_->open();
+/*
+通訊關閉要寫在解構子裡。
+*/
+	}
+	
 
     void RRBOTHardwareInterface::update(const ros::TimerEvent& e)
 	{
