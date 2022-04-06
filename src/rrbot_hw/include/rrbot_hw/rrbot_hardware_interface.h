@@ -1,5 +1,5 @@
-#ifndef ROS_CONTROL__TR1_HARDWARE_INTERFACE_H
-#define ROS_CONTROL__TR1_HARDWARE_INTERFACE_H
+#ifndef ROS_CONTROL__RRBOT_HARDWARE_INTERFACE_H
+#define ROS_CONTROL__RRBOT_HARDWARE_INTERFACE_H
 
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/joint_command_interface.h>
@@ -11,6 +11,7 @@
 #include <controller_manager/controller_manager.h>
 #include <boost/scoped_ptr.hpp>
 #include <ros/ros.h>
+#include "rrbot_hardware.h"
 
 using namespace hardware_interface;
 using joint_limits_interface::JointLimits;
@@ -19,34 +20,34 @@ using joint_limits_interface::PositionJointSoftLimitsHandle;
 using joint_limits_interface::PositionJointSoftLimitsInterface;
 
 
-// namespace tr1_hardware_interface
-// {
-// 	static const double POSITION_STEP_FACTOR = 10;
-// 	static const double VELOCITY_STEP_FACTOR = 10;
+namespace rrbot_hardware_interface
+{
+	static const double POSITION_STEP_FACTOR = 10;
+	static const double VELOCITY_STEP_FACTOR = 10;
 
-// 	class TR1HardwareInterface: public tr1_hardware_interface::TR1Hardware
-// 	{
-// 		public:
-// 			TR1HardwareInterface(ros::NodeHandle& nh);
-// 			~TR1HardwareInterface();
-// 			void init();
-// 			void update(const ros::TimerEvent& e);
-// 			void read();
-// 			void write(ros::Duration elapsed_time);
+	class RRBOTHardwareInterface: public rrbot_hardware_interface::RRBOTHardware
+	{
+		public:
+			RRBOTHardwareInterface(ros::NodeHandle& nh);
+			~RRBOTHardwareInterface();
+			void init();
+			void update(const ros::TimerEvent& e);
+			void read();
+			void write(ros::Duration elapsed_time);
 
-// 		protected:
-// 			ros::NodeHandle nh_;
-// 			ros::Timer non_realtime_loop_;
-// 			ros::Duration control_period_;
-// 			ros::Duration elapsed_time_;
-// 			PositionJointInterface positionJointInterface;
-// 			PositionJointSoftLimitsInterface positionJointSoftLimitsInterface;
-// 			double loop_hz_;
-// 			boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
-// 			double p_error_, v_error_, e_error_;
-// 			std::string _logInfo;
-// 	};
+		protected:
+			ros::NodeHandle nh_;
+			ros::Timer non_realtime_loop_;
+			ros::Duration control_period_;
+			ros::Duration elapsed_time_;
+			PositionJointInterface positionJointInterface;
+			PositionJointSoftLimitsInterface positionJointSoftLimitsInterface;
+			double loop_hz_;
+			boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
+			double p_error_, v_error_, e_error_;
+			std::string _logInfo;
+	};
 
-// }
+} // namespace
 
 #endif
