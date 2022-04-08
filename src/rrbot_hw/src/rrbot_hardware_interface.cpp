@@ -18,7 +18,7 @@ using joint_limits_interface::PositionJointSoftLimitsInterface;
 namespace rrbot_hardware_interface
 {
 
-    RRBOTHardwareInterface::RRBOTHardwareInterface(ros::NodeHandle& nh) : nh_(nh)
+    RRBOTHardwareInterface::RRBOTHardwareInterface(ros::NodeHandle& nh) : nh_(nh), is_echo(true)
 	{
 		init();
 		controller_manager_.reset(new controller_manager::ControllerManager(this, nh_));
@@ -73,7 +73,7 @@ namespace rrbot_hardware_interface
 		// long long l_cnt;
 		// long long r_cnt;
 
-		// multi_drive_->getMotorsEncCount(r_cnt, l_cnt);
+		multi_drive_->NULL_TO_ECHO(is_echo)
 
 		// double l_delta_rads = -l_cnt * encoder_to_rad_ - joints_[0].position - joints_[0].position_offset;
 		// double r_delta_rads = r_cnt * encoder_to_rad_ - joints_[1].position - joints_[1].position_offset;
@@ -93,6 +93,7 @@ namespace rrbot_hardware_interface
 		// int16_t rpm[2] = {right_motor_rpm, left_motor_rpm};
 		
 		// multi_drive_->JG(2, &rpm[0]);
+		multi_drive_->JG(u_int16_t(&cmd[0]), is_echo);
 	}
 
 

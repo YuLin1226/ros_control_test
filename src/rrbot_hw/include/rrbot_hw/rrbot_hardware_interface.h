@@ -36,6 +36,8 @@ namespace rrbot_hardware_interface
 			void read();
 			void write(ros::Duration elapsed_time);
 
+			bool is_echo;
+
 		protected:
 			ros::NodeHandle nh_;
 			ros::Timer non_realtime_loop_;
