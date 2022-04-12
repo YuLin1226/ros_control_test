@@ -65,35 +65,23 @@ namespace rrbot_hardware_interface
 	}
 
 /*
-下面兩個函數應該要改成 Modbus 通訊
+下面兩個函數應該要改成 Modbus 通訊，目前Modbus函數都只包含「寫給驅動器資料」，但還沒有「從驅動緝拿資料」和「處理資料」的部份。
 */
 
 	void RRBOTHardwareInterface::read()
 	{
-		// long long l_cnt;
-		// long long r_cnt;
+		double joint_data;
+	
+		multi_drive_->NULL_TO_ECHO(is_echo);
 
-		multi_drive_->NULL_TO_ECHO(is_echo)
-
-		// double l_delta_rads = -l_cnt * encoder_to_rad_ - joints_[0].position - joints_[0].position_offset;
-		// double r_delta_rads = r_cnt * encoder_to_rad_ - joints_[1].position - joints_[1].position_offset;
-
-		// joints_[0].position += l_delta_rads;
-		// joints_[1].position += r_delta_rads;
+		joints_.position = joint_data;
+		
 	}
 
 	void RRBOTHardwareInterface::write(ros::Duration elapsed_time)
 	{
-		// double diff_speed_left = joints_[LEFT].velocity_command;
-		// double diff_speed_right = joints_[RIGHT].velocity_command;
-
-		// int16_t left_motor_rpm = -round(diff_speed_left * 60 / (2 * M_PI));
-		// int16_t right_motor_rpm = round(diff_speed_right * 60 / (2 * M_PI));
-
-		// int16_t rpm[2] = {right_motor_rpm, left_motor_rpm};
-		
-		// multi_drive_->JG(2, &rpm[0]);
-		multi_drive_->JG(u_int16_t(&cmd[0]), is_echo);
+		uint16_t cmd_rpm = joints_.velocity_command;
+		multi_drive_->JG(cmd_rpm, true);
 	}
 
 

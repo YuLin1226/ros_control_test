@@ -57,12 +57,20 @@ namespace rrbot_hardware_interface
 
             hardware_interface::JointStateInterface jnt_state_interface;
             hardware_interface::PositionJointInterface jnt_pos_interface;
-            double cmd[2];
-            double pos[2];
-            double vel[2];
-            double eff[2];
-	};
 
+			struct Joint
+			{
+				double position;
+				double velocity;
+				double effort;
+				double velocity_command;
+
+				Joint() : position(0), velocity(0), effort(0), velocity_command(0)
+				{
+				}
+			} joints_;
+
+	};
 } // namespace
 
 #endif
