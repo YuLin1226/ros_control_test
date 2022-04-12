@@ -1,4 +1,4 @@
-#include "include/motor_driver.h"
+#include "../include/rrbot_hw/motor_driver.h"
 
 namespace Motor{
 
@@ -386,5 +386,32 @@ namespace Motor{
         }
     }
 
+    double MotorDriver::get_Encoder(){
+        const int expected_bytes = 8;
+
+        this->NULL_TO_ECHO(true);        
+        std::vector<char> response;
+        {
+            usleep(RESPONSE_DELAY_US);
+            try
+            {
+                response = asyncRead(expected_bytes);
+            }
+            catch(const std::exception& e)
+            {
+                std::cerr << e.what() << '\n';
+            }
+        }
+
+        double encoder_data_;
+        union unionType encoder_index_, encoder_step_;
+        encoder_index_._data_byte[1]    = response.at(2);
+        encoder_index_._data_byte[0]    = response.at(3);
+        encoder_step_._data_byte[1]     = response.at(4);
+        encoder_step_._data_byte[0]     = response.at(5);
+        encoder_data_ = encoder_index_._data + encoder_step_._data/10000;
+
+        return encoder_data_;
+    }
 
 }

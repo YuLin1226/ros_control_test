@@ -40,7 +40,7 @@ namespace rrbot_hardware_interface
         /*
         這邊應該要改 joint name "A" -> "joint1"
         */
-        hardware_interface::JointHandle pos_handle_a(jnt_state_interface.getHandle("joint1"), &cmd[0]);
+        hardware_interface::JointHandle pos_handle_a(jnt_state_interface.getHandle("joint1"), &joints_.velocity_command);
         jnt_pos_interface.registerHandle(pos_handle_a);
         registerInterface(&jnt_pos_interface);
 
@@ -65,23 +65,18 @@ namespace rrbot_hardware_interface
 	}
 
 /*
-下面兩個函數應該要改成 Modbus 通訊，目前Modbus函數都只包含「寫給驅動器資料」，但還沒有「從驅動緝拿資料」和「處理資料」的部份。
+下面兩個函數應該要改成 Modbus 通訊，目前Modbus函數都只包含「寫給驅動器資料」，但還沒有「從驅動器拿資料」和「處理資料」的部份。
 */
 
 	void RRBOTHardwareInterface::read()
 	{
-		double joint_data;
-	
-		multi_drive_->NULL_TO_ECHO(is_echo);
-
-		joints_.position = joint_data;
-		
+		joints_.position = multi_drive_->get_Encoder();	
 	}
 
 	void RRBOTHardwareInterface::write(ros::Duration elapsed_time)
 	{
 		uint16_t cmd_rpm = joints_.velocity_command;
-		multi_drive_->JG(cmd_rpm, true);
+		multi_drive_->JG(cmd_rpm, false);
 	}
 
 

@@ -52,9 +52,7 @@ namespace Motor
         void CMA(uint16_t _index, uint16_t _step, bool is_echo);
         void NULL_TO_ECHO(bool is_echo);
 
-    
-
-
+        double get_Encoder();
 
     };
 } // namespace Motor
