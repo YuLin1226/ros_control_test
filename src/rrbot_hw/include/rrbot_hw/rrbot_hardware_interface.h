@@ -64,8 +64,10 @@ namespace rrbot_hardware_interface
 				double velocity;
 				double effort;
 				double velocity_command;
+				double position_command;
+				double effort_command;
 
-				Joint() : position(0), velocity(0), effort(0), velocity_command(0)
+				Joint() : position(0), velocity(0), effort(0), velocity_command(0), position_command(0), effort_command(0)
 				{
 				}
 			} joints_;

@@ -1,12 +1,13 @@
 #include <sstream>
 // #include <rrbot_hw/rrbot_hardware_interface.h>
-#include "../include/rrbot_hw/rrbot_hardware_interface.h"
+#include <rrbot_hw/rrbot_hardware_interface.h>
 #include <joint_limits_interface/joint_limits_interface.h>
 #include <joint_limits_interface/joint_limits.h>
 #include <joint_limits_interface/joint_limits_urdf.h>
 #include <joint_limits_interface/joint_limits_rosparam.h>
 // #include <tr1cpp/tr1.h>
 // #include <tr1cpp/joint.h>
+#include <cmath>
 
 using namespace hardware_interface;
 using joint_limits_interface::JointLimits;
@@ -50,9 +51,7 @@ namespace rrbot_hardware_interface
 	{
 		multi_drive_ = std::make_shared<Motor::MotorDriver>(port_name, baud_rate);
 		multi_drive_->open();
-/*
-通訊關閉要寫在解構子裡。
-*/
+		multi_drive_->CS(0, 0, false);
 	}
 	
 
@@ -64,9 +63,6 @@ namespace rrbot_hardware_interface
 		write(elapsed_time_);
 	}
 
-/*
-下面兩個函數應該要改成 Modbus 通訊，目前Modbus函數都只包含「寫給驅動器資料」，但還沒有「從驅動器拿資料」和「處理資料」的部份。
-*/
 
 	void RRBOTHardwareInterface::read()
 	{
@@ -75,14 +71,13 @@ namespace rrbot_hardware_interface
 
 	void RRBOTHardwareInterface::write(ros::Duration elapsed_time)
 	{
-		uint16_t cmd_rpm = joints_.velocity_command;
-		multi_drive_->JG(cmd_rpm, false);
+		// uint16_t cmd_rpm = joints_.velocity_command;
+		// multi_drive_->JG(cmd_rpm, false);
+		double cmd_pos	= joints_.position_command/(2*M_PI);
+		uint16_t _index = cmd_pos;
+		uint16_t _step 	= (cmd_pos - _index)*10000;
+		multi_drive_->CMA(_index, _step, false);
 	}
-
-
-
-
-
 
 } // namespace
 

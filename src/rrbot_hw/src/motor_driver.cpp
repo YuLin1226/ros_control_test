@@ -1,4 +1,4 @@
-#include "../include/rrbot_hw/motor_driver.h"
+#include <rrbot_hw/motor_driver.h>
 #include <cmath>
 
 
@@ -411,7 +411,7 @@ namespace Motor{
         encoder_index_._data_byte[0]    = response.at(3);
         encoder_step_._data_byte[1]     = response.at(4);
         encoder_step_._data_byte[0]     = response.at(5);
-        encoder_data_ = (encoder_index_._data + encoder_step_._data/10000)*M_PI/360;
+        encoder_data_ = (encoder_index_._data + encoder_step_._data/10000.0)*2.0*M_PI;
 
         return encoder_data_;
     }
