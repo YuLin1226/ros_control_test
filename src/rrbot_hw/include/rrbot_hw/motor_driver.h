@@ -1,4 +1,4 @@
-#include "modbus.h"
+#include <rrbot_hw/modbus.h>
 
 #ifndef MOTOR_DRIVER_H
 #define MOTOR_DRIVER_H

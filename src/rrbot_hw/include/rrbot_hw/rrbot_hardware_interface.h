@@ -11,8 +11,8 @@
 #include <controller_manager/controller_manager.h>
 #include <boost/scoped_ptr.hpp>
 #include <ros/ros.h>
-#include "rrbot_hardware.h"
-#include "motor_driver.h"
+#include <rrbot_hw/rrbot_hardware.h>
+#include <rrbot_hw/motor_driver.h>
 
 using namespace hardware_interface;
 using joint_limits_interface::JointLimits;

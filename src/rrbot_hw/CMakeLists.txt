@@ -41,10 +41,10 @@ add_library(${PROJECT_NAME}
     src/rrbot_hardware_interface
     src/rrbot_hardware_interface_node.cpp
 )
-target_link_libraries(${PROJECT_NAME}
-	${catkin_LIBRARIES}
-    ${Boost_LIBRARIES}
-)
+# target_link_libraries(${PROJECT_NAME}
+# 	${catkin_LIBRARIES}
+#     ${Boost_LIBRARIES}
+# )
 
 
 # add_library(modbus src/modbus.cpp)
@@ -65,7 +65,12 @@ target_link_libraries(${PROJECT_NAME}
 # 	${catkin_LIBRARIES}
 # )
 
-add_executable(rrbot_hardware_interface_node src/rrbot_hardware_interface_node.cpp src/rrbot_hardware_interface.cpp src/motor_driver.cpp src/modbus)
+add_executable(rrbot_hardware_interface_node 
+    src/rrbot_hardware_interface_node.cpp 
+    src/rrbot_hardware_interface.cpp 
+    src/motor_driver.cpp 
+    src/modbus.cpp
+)
 
 add_dependencies(rrbot_hardware_interface_node 
     ${${PROJECT_NAME}_EXPORTED_TARGETS} 
