@@ -1,19 +1,19 @@
 #include <sstream>
 // #include <rrbot_hw/rrbot_hardware_interface.h>
 #include <rrbot_hw/rrbot_hardware_interface.h>
-#include <joint_limits_interface/joint_limits_interface.h>
-#include <joint_limits_interface/joint_limits.h>
-#include <joint_limits_interface/joint_limits_urdf.h>
-#include <joint_limits_interface/joint_limits_rosparam.h>
+// #include <joint_limits_interface/joint_limits_interface.h>
+// #include <joint_limits_interface/joint_limits.h>
+// #include <joint_limits_interface/joint_limits_urdf.h>
+// #include <joint_limits_interface/joint_limits_rosparam.h>
 // #include <tr1cpp/tr1.h>
 // #include <tr1cpp/joint.h>
 #include <cmath>
 
 using namespace hardware_interface;
-using joint_limits_interface::JointLimits;
-using joint_limits_interface::SoftJointLimits;
-using joint_limits_interface::PositionJointSoftLimitsHandle;
-using joint_limits_interface::PositionJointSoftLimitsInterface;
+// using joint_limits_interface::JointLimits;
+// using joint_limits_interface::SoftJointLimits;
+// using joint_limits_interface::PositionJointSoftLimitsHandle;
+// using joint_limits_interface::PositionJointSoftLimitsInterface;
 
 
 namespace rrbot_hardware_interface

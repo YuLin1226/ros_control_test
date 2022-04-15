@@ -13,16 +13,17 @@ find_package(catkin REQUIRED COMPONENTS
     roscpp
 )
 find_package(Boost REQUIRED)
+# find_package(Boost REQUIRED COMPONENTS thread)
 
 include_directories(
-    include
+    include/
     ${catkin_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
 )
 
 catkin_package(
     INCLUDE_DIRS 
-        include
+        include/
     LIBRARIES 
         ${PROJECT_NAME}
     CATKIN_DEPENDS 
@@ -33,43 +34,29 @@ catkin_package(
         Boost
 )
 
-
+install(DIRECTORY include/${PROJECT_NAME}/
+    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+    FILES_MATCHING PATTERN "*.h"
+    PATTERN ".svn" EXCLUDE
+)
+    
 
 add_library(${PROJECT_NAME}
-    src/motor_driver.cpp
-    src/modbus.cpp
-    src/rrbot_hardware_interface
-    src/rrbot_hardware_interface_node.cpp
+src/modbus.cpp
+src/motor_driver.cpp
+src/rrbot_hardware_interface.cpp
 )
-# target_link_libraries(${PROJECT_NAME}
-# 	${catkin_LIBRARIES}
-#     ${Boost_LIBRARIES}
-# )
+target_link_libraries(${PROJECT_NAME}
+	${catkin_LIBRARIES}
+    ${Boost_LIBRARIES}
+)
 
-
-# add_library(modbus src/modbus.cpp)
-# target_link_libraries(modbus
-# 	${catkin_LIBRARIES}
-#     ${Boost_LIBRARIES}
-# )
-
-# add_library(motor_driver src/motor_driver.cpp)
-# add_dependencies(motor_driver modbus)
-# target_link_libraries(motor_driver
-# 	${catkin_LIBRARIES}
-# )
-
-# add_library(rrbot_hardware_interface src/rrbot_hardware_interface.cpp)
-# add_dependencies(rrbot_hardware_interface motor_driver)
-# target_link_libraries(rrbot_hardware_interface
-# 	${catkin_LIBRARIES}
-# )
 
 add_executable(rrbot_hardware_interface_node 
     src/rrbot_hardware_interface_node.cpp 
-    src/rrbot_hardware_interface.cpp 
-    src/motor_driver.cpp 
-    src/modbus.cpp
+    # src/rrbot_hardware_interface.cpp 
+    # src/motor_driver.cpp 
+    # src/modbus.cpp
 )
 
 add_dependencies(rrbot_hardware_interface_node 
@@ -78,13 +65,16 @@ add_dependencies(rrbot_hardware_interface_node
 )
 
 target_link_libraries(rrbot_hardware_interface_node
+    ${PROJECT_NAME}
     ${catkin_LIBRARIES}
     ${Boost_LIBRARIES}
+    # rrbot_hardware_interface
 )
 
-# install(DIRECTORY include/${PROJECT_NAME}/
-#     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#     FILES_MATCHING PATTERN "*.h"
-#     PATTERN ".svn" EXCLUDE
-# )
-    
+
+
+install(TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
