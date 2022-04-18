@@ -1,0 +1,17 @@
+<launch>
+
+
+    <!-- Rviz -->
+    <include file="$(find rrbot_description)/launch/rrbot_rviz.launch" />
+
+    <!-- ROS Control -->
+    <include file="$(find rrbot_control)/launch/rrbot_control.launch" />
+
+    <!-- RobotHW Node -->
+    <node   name="rrbot_hardware_interface_node" 
+            pkg="rrbot_hw" 
+            type="rrbot_hardware_interface_node" 
+            respawn="false"
+	        output="screen"/>
+
+</launch>

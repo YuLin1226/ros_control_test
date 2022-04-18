@@ -37,11 +37,13 @@ namespace rrbot_hardware_interface
 
 	void RRBOTHardwareInterface::init()
 	{
-		serial_setup("/dev/ttyUSB0", 115200);
-        /*
-        這邊應該要改 joint name "A" -> "joint1"
-        */
-        hardware_interface::JointHandle pos_handle_a(jnt_state_interface.getHandle("joint1"), &joints_.velocity_command);
+		// serial_setup("/dev/ttyUSB0", 115200);
+        
+	   	hardware_interface::JointStateHandle state_handle_a("joint1", &joints_.position_command, &joints_.velocity_command, &joints_.effort_command);
+   		jnt_state_interface.registerHandle(state_handle_a);
+		registerInterface(&jnt_state_interface);
+
+        hardware_interface::JointHandle pos_handle_a(jnt_state_interface.getHandle("joint1"), &joints_.position_command);
         jnt_pos_interface.registerHandle(pos_handle_a);
         registerInterface(&jnt_pos_interface);
 
@@ -66,7 +68,7 @@ namespace rrbot_hardware_interface
 
 	void RRBOTHardwareInterface::read()
 	{
-		joints_.position = multi_drive_->get_Encoder();	
+		// joints_.position = multi_drive_->get_Encoder();	
 	}
 
 	void RRBOTHardwareInterface::write(ros::Duration elapsed_time)
@@ -76,7 +78,7 @@ namespace rrbot_hardware_interface
 		double cmd_pos	= joints_.position_command/(2*M_PI);
 		uint16_t _index = cmd_pos;
 		uint16_t _step 	= (cmd_pos - _index)*10000;
-		multi_drive_->CMA(_index, _step, false);
+		// multi_drive_->CMA(_index, _step, false);
 	}
 
 } // namespace

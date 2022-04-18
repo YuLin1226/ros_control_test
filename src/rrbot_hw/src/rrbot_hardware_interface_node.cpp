@@ -13,7 +13,8 @@ int main(int argc, char** argv)
 
   rrbot_hardware_interface::RRBOTHardwareInterface rrbot1(nh);
 
-  ros::spin();
+  // ros::spin();
+  ros::waitForShutdown();
 
   return 0;
 }
