@@ -94,6 +94,25 @@ namespace Motor
         void NULL_Lite(bool is_echo);
 
 
+    public:
+        // For driving Wheels.
+        void Multi_ISTOP_Lite(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Echo_);
+
+        void Multi_JG_Lite(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Data_, std::vector<uint16_t> Echo_);
+
+        void Multi_FREE_Lite(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Data_, std::vector<uint16_t> Echo_);
+
+        void Multi_SVON_Lite(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Data_, std::vector<uint16_t> Echo_);
+
+        void Multi_SVOFF_Lite(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Data_, std::vector<uint16_t> Echo_);
+
+        void Multi_ALM_RST_Lite(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Data_, std::vector<uint16_t> Echo_);
+
+        void Multi_BRAKE_Lite(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Data_, std::vector<uint16_t> Echo_);
+
+        void Multi_NULL_Lite(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Data_, std::vector<uint16_t> Echo_);
+
+
     };
 } // namespace Motor
 

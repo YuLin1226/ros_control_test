@@ -20,9 +20,20 @@ int main(int argc, char **argv)
     std::shared_ptr<Motor::MotorDriver> p_motor = std::make_shared<Motor::MotorDriver>(argc > 1 ? argv[1] : "/dev/ttyUSB0", 115200);
     p_motor->open();
 
-    // CMD: Motor Move.
-    p_motor -> JG(300, false);
+    // // CMD: Motor Move.
+    // p_motor -> JG(300, false);
+    // sleep(1);
+
+    // TEST: Multi_CMD_Lite
+    uint8_t num_ = 2;
+    std::vector<uint8_t> motor_id_({0x01, 0x02});
+    std::vector<uint16_t> cmd_rpm_({100, 100});
+    std::vector<uint16_t> echo_({0x7F, 0x7F});
+
+    p_motor->Multi_JG_Lite(num_, motor_id_, cmd_rpm_, echo_);
+    // p_motor -> JG_Lite(300, false);
     sleep(1);
+
 
     // CMD: Read Motor Current
     while (ros::ok())
@@ -40,6 +51,8 @@ int main(int argc, char **argv)
             std::cerr << e.what() << '\n';
         }
     }
+
+    
 
     // ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
     // ros::spin();

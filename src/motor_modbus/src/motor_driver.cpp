@@ -702,4 +702,73 @@ namespace Motor{
     }
 
 
+    void MotorDriver::Multi_ISTOP_Lite(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Echo_){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD_Lite);
+        p_data.push_back(Num_);
+
+        for(auto i=0; i<ID_.size(); i++){
+            unionType _data_i, _echo_i;
+            _data_i._data = 0x00;
+            _echo_i._data = Echo_[i];
+            p_data.push_back(ID_[i]);
+            p_data.push_back(this->CMD_ISTOP_Lite);
+            p_data.push_back(_data_i._data_byte[1]);
+            p_data.push_back(_data_i._data_byte[0]);
+            p_data.push_back(_echo_i._data_byte[1]);
+            p_data.push_back(_echo_i._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_ISTOP_Lite Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+
+    void MotorDriver::Multi_JG_Lite(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Data_, std::vector<uint16_t> Echo_){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD_Lite);
+        p_data.push_back(Num_);
+
+        for(auto i=0; i<ID_.size(); i++){
+            unionType _data_i, _echo_i;
+            _data_i._data = Data_[i];
+            _echo_i._data = Echo_[i];
+            p_data.push_back(ID_[i]);
+            p_data.push_back(this->CMD_JG_Lite);
+            p_data.push_back(_data_i._data_byte[1]);
+            p_data.push_back(_data_i._data_byte[0]);
+            p_data.push_back(_echo_i._data_byte[1]);
+            p_data.push_back(_echo_i._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_JG_Lite Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+
+
 }
