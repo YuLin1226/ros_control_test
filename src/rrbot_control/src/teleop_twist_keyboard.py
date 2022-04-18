@@ -130,9 +130,13 @@ if __name__=="__main__":
         print(e)
 
     finally:
-        twist = Twist()
-        twist.linear.x = 0; twist.linear.y = 0; twist.linear.z = 0
-        twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = 0
-        pub1.publish(twist)
+        # twist = Twist()
+        # twist.linear.x = 0; twist.linear.y = 0; twist.linear.z = 0
+        # twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = 0
+        # pub1.publish(twist)
+
+        cmd = Float64()
+        cmd.data = 0;
+        pub2.publish(cmd)
 
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
