@@ -16,8 +16,12 @@ namespace Motor{
     MotorDriver::~MotorDriver(){
         // STOP Motor
         uint8_t num_ = 2;
-        std::vector<uint8_t> motor_id_({0x01, 0x02});
-        this->Multi_ISTOP_Lite(num_, motor_id_, false);
+        std::vector<uint8_t> drive_motor_id_({0x01, 0x02});
+        this->Multi_ISTOP_Lite(num_, drive_motor_id_, false);
+
+        sleep(1);
+        std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
+        this->Multi_ISTOP(num_, steer_motor_id_, false);
         // this->ISTOP(false);
         // this->FREE(false);
     }
