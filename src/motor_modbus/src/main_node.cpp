@@ -15,11 +15,11 @@ void subCallback(const geometry_msgs::Twist msg)
     std::vector<int16_t> cmd_rpm_;
     std::vector<int16_t> index_;
     std::vector<uint16_t> step_;
-    if (msg.linear.y > 0){
+    if (msg.linear.y < 0){
         index_ = {5, 5};
         step_ = {0, 0};
     }
-    else if (msg.linear.y < 0){
+    else if (msg.linear.y > 0){
         index_ = {-5, -5};
         step_ = {0, 0};
     }
@@ -28,7 +28,7 @@ void subCallback(const geometry_msgs::Twist msg)
         step_ = {0, 0};
     }
     p_motor->Multi_CMR(num_, steer_motor_id_, index_, step_, false);
-    usleep(50);
+    usleep(50000);
     
     if(msg.linear.x > 0){
         cmd_rpm_ = {-100, -100};
@@ -40,7 +40,16 @@ void subCallback(const geometry_msgs::Twist msg)
         cmd_rpm_ = {0, 0};
     }
     p_motor->Multi_JG_Lite(num_, drive_motor_id_, cmd_rpm_, false);
-    usleep(50);
+    usleep(50000);
+}
+
+void init_encoder(){
+    uint8_t num_ = 2;
+    std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
+    std::vector<int16_t> index_({0,0});
+    std::vector<uint16_t> step_({0,0});
+    p_motor->Multi_CS(num_, steer_motor_id_, index_, step_, false);
+    usleep(50000);
 }
 
 int main(int argc, char **argv)
@@ -53,8 +62,9 @@ int main(int argc, char **argv)
     ros::Rate loop_rate(10);
 
     // Modbus 宣告
-    
     p_motor->open();
+    init_encoder();
+    
 
     /*  ===============
         CMD: Motor Move
