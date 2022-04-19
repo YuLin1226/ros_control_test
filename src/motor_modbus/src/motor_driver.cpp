@@ -15,7 +15,10 @@ namespace Motor{
     }
     MotorDriver::~MotorDriver(){
         // STOP Motor
-        this->ISTOP(false);
+        uint8_t num_ = 2;
+        std::vector<uint8_t> motor_id_({0x01, 0x02});
+        this->Multi_ISTOP_Lite(num_, motor_id_, false);
+        // this->ISTOP(false);
         // this->FREE(false);
     }
 
@@ -1157,7 +1160,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::Multi_IMR(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
+    void MotorDriver::Multi_IMR(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
 
         std::vector<uint8_t> p_data;
         p_data.clear();
@@ -1193,7 +1196,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::Multi_CS(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
+    void MotorDriver::Multi_CS(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
 
         std::vector<uint8_t> p_data;
         p_data.clear();
@@ -1230,7 +1233,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::Multi_CMR(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
+    void MotorDriver::Multi_CMR(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
 
         std::vector<uint8_t> p_data;
         p_data.clear();
@@ -1266,7 +1269,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::Multi_CMA(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
+    void MotorDriver::Multi_CMA(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
 
         std::vector<uint8_t> p_data;
         p_data.clear();

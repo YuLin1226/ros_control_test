@@ -133,13 +133,13 @@ namespace Motor
 
         void Multi_NULL(uint8_t Num_, std::vector<uint8_t> ID_, bool is_echo);
 
-        void Multi_IMR(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> _Index, std::vector<uint16_t> _Step, bool is_echo);
+        void Multi_IMR(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> _Index, std::vector<uint16_t> _Step, bool is_echo);
 
-        void Multi_CS(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> _Index, std::vector<uint16_t> _Step, bool is_echo);
+        void Multi_CS(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> _Index, std::vector<uint16_t> _Step, bool is_echo);
 
-        void Multi_CMR(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> _Index, std::vector<uint16_t> _Step, bool is_echo);
-        
-        void Multi_CMA(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> _Index, std::vector<uint16_t> _Step, bool is_echo);
+        void Multi_CMR(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> _Index, std::vector<uint16_t> _Step, bool is_echo);
+
+        void Multi_CMA(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> _Index, std::vector<uint16_t> _Step, bool is_echo);
 
         void find_Steering_Home(std::vector<uint8_t> ID_);
     };

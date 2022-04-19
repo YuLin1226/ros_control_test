@@ -36,11 +36,15 @@ int main(int argc, char **argv)
     
     p_motor->open();
 
-    // // CMD: Motor Move.
+    /*  ===============
+        CMD: Motor Move
+        =============== */
     // p_motor -> JG(300, false);
     // sleep(1);
 
-    // // TEST: Multi_CMD_Lite
+    /*  ====================
+        TEST: Multi_CMD_Lite
+        ==================== */
     // uint8_t num_ = 2;
     // std::vector<uint8_t> motor_id_({0x01, 0x02});
     // std::vector<uint16_t> cmd_rpm_({100, 100});
@@ -48,6 +52,31 @@ int main(int argc, char **argv)
     // p_motor->Multi_JG_Lite(num_, motor_id_, cmd_rpm_, true);
     // // p_motor -> JG_Lite(300, false);
     // sleep(1);
+
+    /*  ===============
+        TEST: Multi_CMD
+        =============== */
+    
+    // uint8_t num_ = 2;
+    // std::vector<uint8_t> motor_id_({0x01, 0x02});
+    // // std::vector<int16_t> cmd_rpm_({100, 100});
+
+    // std::vector<int16_t> i_({0, 0});
+    // std::vector<uint16_t> s_({0, 0});
+
+    // // p_motor->Multi_JG(num_, motor_id_, cmd_rpm_, true);
+    // p_motor->Multi_CS(num_, motor_id_, i_, s_, true);
+
+    // sleep(1);
+    // std::vector<int16_t> index_({10, 10});
+    // std::vector<uint16_t> step_({5000, 5000});
+
+    // // p_motor->Multi_JG(num_, motor_id_, cmd_rpm_, true);
+    // // p_motor->Multi_CMA(num_, motor_id_, index_, step_, true);
+    // p_motor -> JG_Lite(300, false);
+    // sleep(1);
+
+    
 
 
     // CMD: Read Motor Current
