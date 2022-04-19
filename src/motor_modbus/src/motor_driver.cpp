@@ -702,6 +702,8 @@ namespace Motor{
     }
 
 
+
+    // For driving Wheels.
     void MotorDriver::Multi_ISTOP_Lite(uint8_t Num_, std::vector<uint8_t> ID_, bool is_echo){
 
         std::vector<uint8_t> p_data;
@@ -973,5 +975,369 @@ namespace Motor{
         std::cout << std::endl;
 
     }
+
+
+    // For steerng Wheels.
+    void MotorDriver::Multi_ISTOP(uint8_t Num_, std::vector<uint8_t> ID_, bool is_echo){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD);
+        p_data.push_back(Num_);
+
+
+        for(auto i=0; i<ID_.size(); i++){
+            uint8_t _cmd = is_echo ? this->CMD_ISTOP_Echo : this->CMD_ISTOP_No_Echo;
+            unionType _data_1, _data_2;
+            _data_1._data = 0x00;
+            _data_2._data = 0x00;
+            p_data.push_back(ID_[i]);
+            p_data.push_back(_cmd);
+            p_data.push_back(_data_1._data_byte[1]);
+            p_data.push_back(_data_1._data_byte[0]);
+            p_data.push_back(_data_2._data_byte[1]);
+            p_data.push_back(_data_2._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_ISTOP Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+
+    void MotorDriver::Multi_JG(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> Data_,bool is_echo){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD);
+        p_data.push_back(Num_);
+
+
+        for(auto i=0; i<ID_.size(); i++){
+            int8_t _cmd = is_echo ? this->CMD_JG_Echo : this->CMD_JG_No_Echo;
+            unionType _data_1, _data_2;
+            _data_1._data = 0x00;
+            _data_2._data = Data_[i];
+            p_data.push_back(ID_[i]);
+            p_data.push_back(_cmd);
+            p_data.push_back(_data_1._data_byte[1]);
+            p_data.push_back(_data_1._data_byte[0]);
+            p_data.push_back(_data_2._data_byte[1]);
+            p_data.push_back(_data_2._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_JG Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    void MotorDriver::Multi_FREE(uint8_t Num_, std::vector<uint8_t> ID_, bool is_echo){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD);
+        p_data.push_back(Num_);
+
+
+        for(auto i=0; i<ID_.size(); i++){
+            uint8_t _cmd = is_echo ? this->CMD_FREE_Echo : this->CMD_FREE_No_Echo;
+            unionType _data_1, _data_2;
+            _data_1._data = 0x00;
+            _data_2._data = 0x00;
+            p_data.push_back(ID_[i]);
+            p_data.push_back(_cmd);
+            p_data.push_back(_data_1._data_byte[1]);
+            p_data.push_back(_data_1._data_byte[0]);
+            p_data.push_back(_data_2._data_byte[1]);
+            p_data.push_back(_data_2._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_FREE Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+
+    void MotorDriver::Multi_SVON(uint8_t Num_, std::vector<uint8_t> ID_, bool is_echo){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD);
+        p_data.push_back(Num_);
+
+
+        for(auto i=0; i<ID_.size(); i++){
+            uint8_t _cmd = is_echo ? this->CMD_SVON_Echo : this->CMD_SVON_No_Echo;
+            unionType _data_1, _data_2;
+            _data_1._data = 0x00;
+            _data_2._data = 0x00;
+            p_data.push_back(ID_[i]);
+            p_data.push_back(_cmd);
+            p_data.push_back(_data_1._data_byte[1]);
+            p_data.push_back(_data_1._data_byte[0]);
+            p_data.push_back(_data_2._data_byte[1]);
+            p_data.push_back(_data_2._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_SVON Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+
+    void MotorDriver::Multi_SVOFF(uint8_t Num_, std::vector<uint8_t> ID_, bool is_echo){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD);
+        p_data.push_back(Num_);
+
+
+        for(auto i=0; i<ID_.size(); i++){
+            uint8_t _cmd = is_echo ? this->CMD_ISTOP_Echo : this->CMD_ISTOP_No_Echo;
+            unionType _data_1, _data_2;
+            _data_1._data = 0x00;
+            _data_2._data = 0x00;
+            p_data.push_back(ID_[i]);
+            p_data.push_back(_cmd);
+            p_data.push_back(_data_1._data_byte[1]);
+            p_data.push_back(_data_1._data_byte[0]);
+            p_data.push_back(_data_2._data_byte[1]);
+            p_data.push_back(_data_2._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_ISTOP Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+
+    void MotorDriver::Multi_IMR(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD);
+        p_data.push_back(Num_);
+
+
+        for(auto i=0; i<ID_.size(); i++){
+            uint8_t _cmd = is_echo ? this->CMD_IMR_Echo : this->CMD_IMR_No_Echo;
+            unionType _data_1, _data_2;
+            _data_1._data = Index_[i];
+            _data_2._data = Step_[i];
+            p_data.push_back(ID_[i]);
+            p_data.push_back(_cmd);
+            p_data.push_back(_data_1._data_byte[1]);
+            p_data.push_back(_data_1._data_byte[0]);
+            p_data.push_back(_data_2._data_byte[1]);
+            p_data.push_back(_data_2._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_IMR Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+
+    void MotorDriver::Multi_CS(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD);
+        p_data.push_back(Num_);
+
+
+        for(auto i=0; i<ID_.size(); i++){
+            uint8_t _cmd = is_echo ? this->CMD_CS_Echo : this->CMD_CS_No_Echo;
+            unionType _data_1, _data_2;
+            _data_1._data = Index_[i];
+            _data_2._data = Step_[i];
+
+            p_data.push_back(ID_[i]);
+            p_data.push_back(_cmd);
+            p_data.push_back(_data_1._data_byte[1]);
+            p_data.push_back(_data_1._data_byte[0]);
+            p_data.push_back(_data_2._data_byte[1]);
+            p_data.push_back(_data_2._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_CS Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+
+    void MotorDriver::Multi_CMR(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD);
+        p_data.push_back(Num_);
+
+
+        for(auto i=0; i<ID_.size(); i++){
+            uint8_t _cmd = is_echo ? this->CMD_CMR_Echo : this->CMD_CMR_No_Echo;
+            unionType _data_1, _data_2;
+            _data_1._data = Index_[i];
+            _data_2._data = Step_[i];
+            p_data.push_back(ID_[i]);
+            p_data.push_back(_cmd);
+            p_data.push_back(_data_1._data_byte[1]);
+            p_data.push_back(_data_1._data_byte[0]);
+            p_data.push_back(_data_2._data_byte[1]);
+            p_data.push_back(_data_2._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_CMR Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+
+    void MotorDriver::Multi_CMA(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<uint16_t> Index_, std::vector<uint16_t> Step_, bool is_echo){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD);
+        p_data.push_back(Num_);
+
+
+        for(auto i=0; i<ID_.size(); i++){
+            uint8_t _cmd = is_echo ? this->CMD_CMA_Echo : this->CMD_CMA_No_Echo;
+            unionType _data_1, _data_2;
+            _data_1._data = Index_[i];
+            _data_2._data = Step_[i];
+            p_data.push_back(ID_[i]);
+            p_data.push_back(_cmd);
+            p_data.push_back(_data_1._data_byte[1]);
+            p_data.push_back(_data_1._data_byte[0]);
+            p_data.push_back(_data_2._data_byte[1]);
+            p_data.push_back(_data_2._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_CMA Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+
+    void MotorDriver::Multi_NULL(uint8_t Num_, std::vector<uint8_t> ID_, bool is_echo){
+
+        std::vector<uint8_t> p_data;
+        p_data.clear();
+        p_data.push_back(this->Broadcast);
+        p_data.push_back(this->FC_MasterSendCMD);
+        p_data.push_back(Num_);
+
+
+        for(auto i=0; i<ID_.size(); i++){
+            uint8_t _cmd = is_echo ? this->CMD_NULL_Echo : this->CMD_NULL_No_Echo;
+            unionType _data_1, _data_2;
+            _data_1._data = 0x00;
+            _data_2._data = 0x00;
+            p_data.push_back(ID_[i]);
+            p_data.push_back(_cmd);
+            p_data.push_back(_data_1._data_byte[1]);
+            p_data.push_back(_data_1._data_byte[0]);
+            p_data.push_back(_data_2._data_byte[1]);
+            p_data.push_back(_data_2._data_byte[0]);
+        }
+
+        uint16_t crc = this->calculate_CRC(p_data);
+        p_data.push_back(crc);
+        p_data.push_back(crc >> 8);
+        std::vector<char> p_char(p_data.begin(), p_data.end());
+        this->write(p_char);
+
+        std::cout <<  "Send Multi_NULL Command: ";
+        for(auto i=0;i<p_char.size();i++){            
+            std::cout << std::hex << (int)p_data[i] << " ";
+        }
+        std::cout << std::endl;
+
+    }
+
+
 
 }
