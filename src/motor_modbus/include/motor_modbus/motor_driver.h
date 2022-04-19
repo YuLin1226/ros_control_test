@@ -14,6 +14,12 @@ namespace Motor
         const uint8_t Broadcast         = 0x00;
         const uint8_t MOTOR_ID          = 0x01; // this shouldn't be const, cuz it's different for different motors.
         const uint8_t FC_MasterSendCMD  = 0x65;
+
+        const uint8_t Front_Drive_ID    = 0x01;
+        const uint8_t Rear_Drive_ID     = 0x02;
+        const uint8_t Front_Steer_ID    = 0x03;
+        const uint8_t Rear_Steer_ID     = 0x04;
+
         const uint8_t CMD_ISTOP_Echo    = 0x00;
         const uint8_t CMD_ISTOP_No_Echo = 0x64;
         const uint8_t CMD_JG_Echo       = 0x0A;
