@@ -1,26 +1,46 @@
 #include "ros/ros.h"
 #include "std_msgs/Float64.h"
+#include "geometry_msgs/Twist.h"
 #include <sstream>
 #include <motor_modbus/motor_driver.h>
 
 
 std::shared_ptr<Motor::MotorDriver> p_motor = std::make_shared<Motor::MotorDriver>("/dev/ttyUSB0", 115200);
 
-void subCallback(const std_msgs::Float64 msg)
+void subCallback(const geometry_msgs::Twist msg)
 {
     uint8_t num_ = 2;
-    std::vector<uint8_t> motor_id_({0x01, 0x02});
+    std::vector<uint8_t> drive_motor_id_({0x01, 0x02});
+    std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
     std::vector<int16_t> cmd_rpm_;
-    if(msg.data > 0){
-        cmd_rpm_ = {100, 100};
+    std::vector<int16_t> index_;
+    std::vector<uint16_t> step_;
+    if (msg.linear.y > 0){
+        index_ = {5, 5};
+        step_ = {0, 0};
     }
-    else if(msg.data < 0){
+    else if (msg.linear.y < 0){
+        index_ = {-5, -5};
+        step_ = {0, 0};
+    }
+    else{
+        index_ = {0,0};
+        step_ = {0, 0};
+    }
+    p_motor->Multi_CMR(num_, steer_motor_id_, index_, step_, false);
+    usleep(50);
+    
+    if(msg.linear.x > 0){
         cmd_rpm_ = {-100, -100};
+    }
+    else if(msg.linear.x < 0){
+        cmd_rpm_ = {100, 100};
     }
     else{
         cmd_rpm_ = {0, 0};
     }
-    p_motor->Multi_JG_Lite(num_, motor_id_, cmd_rpm_, true);
+    p_motor->Multi_JG_Lite(num_, drive_motor_id_, cmd_rpm_, false);
+    usleep(50);
 }
 
 int main(int argc, char **argv)
