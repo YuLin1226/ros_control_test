@@ -28,7 +28,7 @@ namespace Motor{
 
 
     // Motor Drive
-    void MotorDriver::ISTOP(bool is_echo = false){
+    void MotorDriver::ISTOP(uint8_t id_ = 0x01, bool is_echo = false){
 
         /* ==============================================================================
             * Example: No Echo
@@ -67,7 +67,7 @@ namespace Motor{
         std::cout << std::endl;
     }
 
-    void MotorDriver::JG(uint16_t _cmd_rpm, bool is_echo = false){
+    void MotorDriver::JG(uint8_t id_ = 0x01, int16_t _cmd_rpm = 0, bool is_echo = false){
 
         /* ==============================================================================
             *     0 < _cmd_rpm < 4000  :  CW
@@ -109,7 +109,7 @@ namespace Motor{
         std::cout << std::endl;
     }
 
-    void MotorDriver::FREE(bool is_echo = false){
+    void MotorDriver::FREE(uint8_t id_ = 0x01, bool is_echo = false){
 
         /* ==============================================================================
             * Example: No Echo
@@ -148,7 +148,7 @@ namespace Motor{
         std::cout << std::endl;
     }
 
-    void MotorDriver::SVON(bool is_echo = false){
+    void MotorDriver::SVON(uint8_t id_ = 0x01, bool is_echo = false){
 
         /* ==============================================================================
             * If echo, receive 8 bytes data per message.
@@ -185,7 +185,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::IMR(uint16_t _index, uint16_t _step, bool is_echo = false){
+    void MotorDriver::IMR(uint8_t id_ = 0x01, int16_t _index = 0, uint16_t _step = 0, bool is_echo = false){
         
         /* ==============================================================================
             * If echo, receive 8 bytes data per message.
@@ -222,7 +222,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::CS(uint16_t _index, uint16_t _step, bool is_echo = false){
+    void MotorDriver::CS(uint8_t id_ = 0x01, int16_t _index = 0, uint16_t _step = 0, bool is_echo = false){
         
         /* ==============================================================================
             * If echo, receive 8 bytes data per message.
@@ -259,7 +259,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::CMR(uint16_t _index, uint16_t _step, bool is_echo = false){
+    void MotorDriver::CMR(uint8_t id_ = 0x01, int16_t _index = 0, uint16_t _step = 0, bool is_echo = false){
         
         /* ==============================================================================
             * If echo, receive 8 bytes data per message.
@@ -296,7 +296,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::CMA(uint16_t _index, uint16_t _step, bool is_echo = false){
+    void MotorDriver::CMA(uint8_t id_ = 0x01, int16_t _index = 0, uint16_t _step = 0, bool is_echo = false){
         
         /* ==============================================================================
             * If echo, receive 8 bytes data per message.
@@ -333,7 +333,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::NULL_TO_ECHO(bool is_echo = true){
+    void MotorDriver::NULL_TO_ECHO(uint8_t id_ = 0x01, bool is_echo = true){
         
         /* ==============================================================================
             * If echo, receive 8 bytes data per message.
@@ -1356,7 +1356,45 @@ namespace Motor{
             * 6. 歸零：CS
         */
 
-       return false;
+        this->JG(-85, false); // motor id 要改
+        usleep(10000);
+        bool io_x1_state = false;
+        while (!io_x1_state)
+        {
+            try
+            {
+                // get X1 IO & update to io_x1_state.
+                usleep(10000);
+            }
+            catch(const std::exception& e)
+            {
+                std::cerr << e.what() << '\n';
+            }
+        }
+        
+        this->JG(85, false); // motor id 要改
+        usleep(10000);
+        bool io_x2_state = false;
+        while (!io_x2_state)
+        {
+            try
+            {
+                // get X1 IO & update to io_x1_state.
+                usleep(10000);
+            }
+            catch(const std::exception& e)
+            {
+                std::cerr << e.what() << '\n';
+            }
+        }
+        this->CMR(-20, 0, false); // index 不能用uint
+        usleep(10000);
+        this->CS(0, 0, false);
+        usleep(10000);
+
+        // 我覺得可以加入一個計時器，時間內沒有完成校正，就直接報錯。
+
+        return true;
     }
 
 

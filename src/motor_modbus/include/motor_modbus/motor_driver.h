@@ -50,16 +50,16 @@ namespace Motor
         MotorDriver(const std::string _serial_port, const int _baud_rate);
         virtual ~MotorDriver();
 
-        void ISTOP(bool is_echo);
-        void JG(uint16_t _cmd_rpm, bool is_echo);
-        void FREE(bool is_echo);
-        void SVON(bool is_echo);
-        void SVOFF(bool is_echo);
-        void IMR(uint16_t _index, uint16_t _step, bool is_echo);
-        void CS(uint16_t _index, uint16_t _step, bool is_echo);
-        void CMR(uint16_t _index, uint16_t _step, bool is_echo);
-        void CMA(uint16_t _index, uint16_t _step, bool is_echo);
-        void NULL_TO_ECHO(bool is_echo);
+        void ISTOP(uint8_t id_, bool is_echo);
+        void JG(uint8_t id_, int16_t _cmd_rpm, bool is_echo);
+        void FREE(uint8_t id_, bool is_echo);
+        void SVON(uint8_t id_, bool is_echo);
+        void SVOFF(uint8_t id_, bool is_echo);
+        void IMR(uint8_t id_, int16_t _index, uint16_t _step, bool is_echo);
+        void CS(uint8_t id_, int16_t _index, uint16_t _step, bool is_echo);
+        void CMR(uint8_t id_, int16_t _index, uint16_t _step, bool is_echo);
+        void CMA(uint8_t id_, int16_t _index, uint16_t _step, bool is_echo);
+        void NULL_TO_ECHO(uint8_t id_, bool is_echo);
 
         double get_Encoder();
         double get_Current(uint8_t id_);
