@@ -44,10 +44,21 @@ void subCallback(const geometry_msgs::Twist msg)
 }
 
 void init_encoder(){
+    
+    /* 尋home待測試 */
     std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
     for(auto i=0; i<steer_motor_id_.size(); i++){
         p_motor->find_Steering_Home(steer_motor_id_[i]);
     }
+
+    /* 未完成尋home用這邊 */
+    // uint8_t num_ = 2;
+    // std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
+    // std::vector<int16_t> index_({0,0});
+    // std::vector<uint16_t> step_({0,0});
+    // p_motor->Multi_CS(num_, steer_motor_id_, index_, step_, false);
+    // usleep(10000);
+
 }
 
 int main(int argc, char **argv)
@@ -114,15 +125,15 @@ int main(int argc, char **argv)
     {
         try
         {
-            std_msgs::Float64 front_current_data;
-            front_current_data.data = p_motor->get_Current(0x01);
-            pub_front.publish(front_current_data);
-            usleep(10000);
+            // std_msgs::Float64 front_current_data;
+            // front_current_data.data = p_motor->get_Current(0x01);
+            // pub_front.publish(front_current_data);
+            // usleep(50000);
 
             std_msgs::Float64 rear_current_data;
             rear_current_data.data = p_motor->get_Current(0x02);
             pub_rear.publish(rear_current_data);
-            usleep(10000);
+            usleep(50000);
 
             ros::spinOnce();
             loop_rate.sleep();

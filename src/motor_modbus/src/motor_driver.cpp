@@ -1364,6 +1364,24 @@ namespace Motor{
             try
             {
                 // get X1 IO & update to io_x1_state.
+                this->NULL_Lite(true, id_)
+                std::vector<char> response;
+                {
+                    usleep(RESPONSE_DELAY_US);
+                    try
+                    {
+                        response = asyncRead(expected_bytes);
+                    }
+                    catch(const std::exception& e)
+                    {
+                        std::cerr << e.what() << '\n';
+                    }
+                }
+
+                union unionType io_state;
+                // io_state._data_byte[1] = response.at(12);
+                io_state._data_byte[0] = response.at(13);
+                io_x1_state = (io_state._data_byte[0]>>2)&1;
                 usleep(10000);
             }
             catch(const std::exception& e)
@@ -1379,7 +1397,24 @@ namespace Motor{
         {
             try
             {
-                // get X1 IO & update to io_x1_state.
+                this->NULL_Lite(true, id_)
+                std::vector<char> response;
+                {
+                    usleep(RESPONSE_DELAY_US);
+                    try
+                    {
+                        response = asyncRead(expected_bytes);
+                    }
+                    catch(const std::exception& e)
+                    {
+                        std::cerr << e.what() << '\n';
+                    }
+                }
+
+                union unionType io_state;
+                // io_state._data_byte[1] = response.at(12);
+                io_state._data_byte[0] = response.at(13);
+                io_x2_state = (io_state._data_byte[0]>>2)&1;
                 usleep(10000);
             }
             catch(const std::exception& e)
