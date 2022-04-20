@@ -22,11 +22,12 @@ namespace rrbot_hardware_interface
     RRBOTHardwareInterface::RRBOTHardwareInterface(ros::NodeHandle& nh) : nh_(nh), is_echo(true)
 	{
 		init();
+		std::cout << "\n\ninit RRBOT HW...\n\n";
 		controller_manager_.reset(new controller_manager::ControllerManager(this, nh_));
 		nh_.param("/rrbot/hardware_interface/loop_hz", loop_hz_, 0.1);
 		ROS_DEBUG_STREAM_NAMED("constructor","Using loop freqency of " << loop_hz_ << " hz");
 		ros::Duration update_freq = ros::Duration(1.0/loop_hz_);
-		non_realtime_loop_ = nh_.createTimer(update_freq, &RRBOTHardwareInterface::update, this);
+		// non_realtime_loop_ = nh_.createTimer(update_freq, &RRBOTHardwareInterface::update, this);
 		ROS_INFO_NAMED("hardware_interface", "Loaded generic_hardware_interface.");
 	}
     
@@ -37,7 +38,7 @@ namespace rrbot_hardware_interface
 
 	void RRBOTHardwareInterface::init()
 	{
-		// serial_setup("/dev/ttyUSB0", 115200);
+		serial_setup("/dev/ttyUSB0", 115200);
         
 	   	hardware_interface::JointStateHandle state_handle_a("joint1", &joints_.position_command, &joints_.velocity_command, &joints_.effort_command);
    		jnt_state_interface.registerHandle(state_handle_a);
@@ -54,31 +55,37 @@ namespace rrbot_hardware_interface
 		multi_drive_ = std::make_shared<Motor::MotorDriver>(port_name, baud_rate);
 		multi_drive_->open();
 		multi_drive_->CS(0, 0, false);
+		usleep(10000);
 	}
 	
 
     void RRBOTHardwareInterface::update(const ros::TimerEvent& e)
 	{
+		std::cout <<"updating updating updating...\n\n";
 		elapsed_time_ = ros::Duration(e.current_real - e.last_real);
 		read();
 		controller_manager_->update(ros::Time::now(), elapsed_time_);
-		write(elapsed_time_);
+		write();
 	}
 
 
 	void RRBOTHardwareInterface::read()
 	{
-		// joints_.position = multi_drive_->get_Encoder();	
+		std::cout << "\n\nReading data...\n\n";
+		joints_.position = multi_drive_->get_Encoder();	
+		usleep(10000);
 	}
 
-	void RRBOTHardwareInterface::write(ros::Duration elapsed_time)
+	void RRBOTHardwareInterface::write()
 	{
 		// uint16_t cmd_rpm = joints_.velocity_command;
 		// multi_drive_->JG(cmd_rpm, false);
+		std::cout << "\n\nWriting data...\n\n";
 		double cmd_pos	= joints_.position_command/(2*M_PI);
 		uint16_t _index = cmd_pos;
 		uint16_t _step 	= (cmd_pos - _index)*10000;
-		// multi_drive_->CMA(_index, _step, false);
+		multi_drive_->CMA(_index, _step, false);
+		usleep(10000);
 	}
 
 } // namespace

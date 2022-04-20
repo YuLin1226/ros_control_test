@@ -34,9 +34,11 @@ namespace rrbot_hardware_interface
 			void init();
 			void update(const ros::TimerEvent& e);
 			void read();
-			void write(ros::Duration elapsed_time);
+			void write();
 
 			bool is_echo;
+			// controller_manager 原本放在protected
+			boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
 
 		protected:
 			ros::NodeHandle nh_;
@@ -46,7 +48,7 @@ namespace rrbot_hardware_interface
 			PositionJointInterface positionJointInterface;
 			// PositionJointSoftLimitsInterface positionJointSoftLimitsInterface;
 			double loop_hz_;
-			boost::shared_ptr<controller_manager::ControllerManager> controller_manager_;
+			
 			double p_error_, v_error_, e_error_;
 			std::string _logInfo;
 			

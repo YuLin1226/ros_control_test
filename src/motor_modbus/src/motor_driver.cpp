@@ -1356,6 +1356,7 @@ namespace Motor{
             * 6. 歸零：CS
         */
 
+        const int expected_bytes = 20;
         this->JG(id_, -85, false);
         usleep(10000);
         bool io_x1_state = false;
@@ -1364,7 +1365,8 @@ namespace Motor{
             try
             {
                 // get X1 IO & update to io_x1_state.
-                this->NULL_Lite(true, id_)
+                
+                this->NULL_Lite(true, id_);
                 std::vector<char> response;
                 {
                     usleep(RESPONSE_DELAY_US);
@@ -1397,7 +1399,7 @@ namespace Motor{
         {
             try
             {
-                this->NULL_Lite(true, id_)
+                this->NULL_Lite(true, id_);
                 std::vector<char> response;
                 {
                     usleep(RESPONSE_DELAY_US);

@@ -10,11 +10,25 @@ int main(int argc, char** argv)
   // as service callbacks to load controllers can block the (main) control loop
   ros::AsyncSpinner spinner(1);
   spinner.start();
-
+  ros::Rate loop_rate(100);
   rrbot_hardware_interface::RRBOTHardwareInterface rrbot(nh);
+  ros::Time last_time = ros::Time::now();
 
-  // ros::spin();
-  ros::waitForShutdown();
+  while (ros::ok())
+  {
+    ros::Time current_time = ros::Time::now();
+    ros::Duration elapsed_time = current_time - last_time;
+    last_time = current_time;
+
+    rrbot.read();
+
+    rrbot.controller_manager_->update(current_time, elapsed_time);
+
+    rrbot.write();
+
+    loop_rate.sleep();
+  }
+  // ros::waitForShutdown();
 
   return 0;
 }
