@@ -62,7 +62,7 @@ namespace Motor
         void NULL_TO_ECHO(bool is_echo);
 
         double get_Encoder();
-        double get_Current();
+        double get_Current(uint8_t id_);
         
     private:
         const uint8_t MOTOR_ID_Lite         = 0x01; // this shouldn't be const, cuz it's different for different motors.
@@ -90,14 +90,14 @@ namespace Motor
 
 
     public:
-        void ISTOP_Lite(bool is_echo);
-        void JG_Lite(uint16_t _cmd_rpm, bool is_echo);
-        void FREE_Lite(bool is_echo);
-        void SVON_Lite(bool is_echo);
-        void SVOFF_Lite(bool is_echo);
-        void ALM_RST_Lite(bool is_echo);
-        void BRAKE_Lite(bool is_echo);
-        void NULL_Lite(bool is_echo);
+        void ISTOP_Lite(bool is_echo, uint8_t id_);
+        void JG_Lite(uint16_t _cmd_rpm, bool is_echo, uint8_t id_);
+        void FREE_Lite(bool is_echo, uint8_t id_);
+        void SVON_Lite(bool is_echo, uint8_t id_);
+        void SVOFF_Lite(bool is_echo, uint8_t id_);
+        void ALM_RST_Lite(bool is_echo, uint8_t id_);
+        void BRAKE_Lite(bool is_echo, uint8_t id_);
+        void NULL_Lite(bool is_echo, uint8_t id_);
 
 
     public:
@@ -141,7 +141,7 @@ namespace Motor
 
         void Multi_CMA(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> _Index, std::vector<uint16_t> _Step, bool is_echo);
 
-        void find_Steering_Home(std::vector<uint8_t> ID_);
+        bool find_Steering_Home(std::vector<uint8_t> ID_);
     };
 } // namespace Motor
 

@@ -395,7 +395,7 @@ namespace Motor{
     }
 
     // Motor Drive Lite
-    void MotorDriver::ISTOP_Lite(bool is_echo = false){
+    void MotorDriver::ISTOP_Lite(bool is_echo = false, uint8_t id_ = 0x01){
 
         std::vector<uint8_t> p_data;
         uint8_t _num = 0x01;
@@ -408,7 +408,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD_Lite);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(this->CMD_ISTOP_Lite);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -427,7 +427,7 @@ namespace Motor{
         std::cout << std::endl;
     }
 
-    void MotorDriver::JG_Lite(uint16_t _cmd_rpm, bool is_echo = false){
+    void MotorDriver::JG_Lite(uint16_t _cmd_rpm, bool is_echo = false, uint8_t id_ = 0x01){
 
         std::vector<uint8_t> p_data;
         uint8_t _num = 0x01;
@@ -440,7 +440,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD_Lite);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(this->CMD_JG_Lite);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -459,7 +459,7 @@ namespace Motor{
         std::cout << std::endl;
     }
 
-    void MotorDriver::FREE_Lite(bool is_echo = false){
+    void MotorDriver::FREE_Lite(bool is_echo = false, uint8_t id_ = 0x01){
 
         std::vector<uint8_t> p_data;
         uint8_t _num = 0x01;
@@ -472,7 +472,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD_Lite);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(this->CMD_FREE_Lite);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -491,7 +491,7 @@ namespace Motor{
         std::cout << std::endl;
     }
 
-    void MotorDriver::SVON_Lite(bool is_echo = false){
+    void MotorDriver::SVON_Lite(bool is_echo = false, uint8_t id_ = 0x01){
 
         std::vector<uint8_t> p_data;
         uint8_t _num = 0x01;
@@ -504,7 +504,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD_Lite);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(this->CMD_SVON_Lite);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -523,7 +523,7 @@ namespace Motor{
         std::cout << std::endl;
     }
 
-    void MotorDriver::SVOFF_Lite(bool is_echo = false){
+    void MotorDriver::SVOFF_Lite(bool is_echo = false, uint8_t id_ = 0x01){
 
         std::vector<uint8_t> p_data;
         uint8_t _num = 0x01;
@@ -536,7 +536,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD_Lite);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(this->CMD_SVOFF_Lite);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -555,7 +555,7 @@ namespace Motor{
         std::cout << std::endl;
     }
 
-    void MotorDriver::ALM_RST_Lite(bool is_echo = false){
+    void MotorDriver::ALM_RST_Lite(bool is_echo = false, uint8_t id_ = 0x01){
 
         std::vector<uint8_t> p_data;
         uint8_t _num = 0x01;
@@ -568,7 +568,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD_Lite);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(this->CMD_ALM_RST_Lite);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -587,7 +587,7 @@ namespace Motor{
         std::cout << std::endl;
     }
 
-    void MotorDriver::BRAKE_Lite(bool is_echo = false){
+    void MotorDriver::BRAKE_Lite(bool is_echo = false, uint8_t id_ = 0x01){
 
         std::vector<uint8_t> p_data;
         uint8_t _num = 0x01;
@@ -600,7 +600,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD_Lite);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(this->CMD_BRAKE_Lite);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -619,7 +619,7 @@ namespace Motor{
         std::cout << std::endl;
     }
 
-    void MotorDriver::NULL_Lite(bool is_echo = false){
+    void MotorDriver::NULL_Lite(bool is_echo = false, uint8_t id_ = 0x01){
 
         std::vector<uint8_t> p_data;
         uint8_t _num = 0x01;
@@ -632,7 +632,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD_Lite);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(this->CMD_NULL_Lite);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -681,9 +681,9 @@ namespace Motor{
         return encoder_data_;
     }
 
-    double MotorDriver::get_Current(){
+    double MotorDriver::get_Current(uint8_t id_){
         const int expected_bytes = 20;
-        this->NULL_Lite(true);
+        this->NULL_Lite(true, id_);
         std::vector<char> response;
         {
             usleep(RESPONSE_DELAY_US);
@@ -1345,6 +1345,19 @@ namespace Motor{
 
     }
 
+    bool MotorDriver::find_Steering_Home(std::vector<uint8_t> ID_){
+        /*
+            尋 Home 應該要前、後輪分開做。
+            * 1. 低速左轉：JG
+            * 2. while 讀取IO-X1：NULL
+            * 3. 低速右轉：JG
+            * 4. while 讀取IO-X2：NULL
+            * 5. 左轉固定角度：CMR
+            * 6. 歸零：CS
+        */
+
+       return false;
+    }
 
 
 }

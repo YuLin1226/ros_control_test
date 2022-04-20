@@ -57,7 +57,8 @@ int main(int argc, char **argv)
     // ROS 宣告
     ros::init(argc, argv, "motor_current_detection_node");
     ros::NodeHandle n;
-    ros::Publisher pub = n.advertise<std_msgs::Float64>("motor_current", 1000);
+    ros::Publisher pub_front = n.advertise<std_msgs::Float64>("front_motor_current", 1000);
+    ros::Publisher pub_rear  = n.advertise<std_msgs::Float64>("rear_motor_current", 1000);
     ros::Subscriber sub = n.subscribe("cmd_key", 1000, subCallback);
     ros::Rate loop_rate(10);
 
@@ -108,23 +109,31 @@ int main(int argc, char **argv)
 
     
 
+    /*  ===================
+    CMD: Read Motor Current
+        =================== */
+    while (ros::ok())
+    {
+        try
+        {
+            std_msgs::Float64 front_current_data;
+            front_current_data.data = p_motor->get_Current(0x01);
+            pub_front.publish(front_current_data);
+            usleep(10000);
 
-    // CMD: Read Motor Current
-    // while (ros::ok())
-    // {
-    //     try
-    //     {
-    //         std_msgs::Float64 current_data;
-    //         current_data.data = p_motor->get_Current();
-    //         pub.publish(current_data);
-    //         ros::spinOnce();
-    //         loop_rate.sleep();
-    //     }
-    //     catch(const std::exception& e)
-    //     {
-    //         std::cerr << e.what() << '\n';
-    //     }
-    // }
+            std_msgs::Float64 rear_current_data;
+            rear_current_data.data = p_motor->get_Current(0x02);
+            pub_rear.publish(rear_current_data);
+            usleep(10000);
+
+            ros::spinOnce();
+            loop_rate.sleep();
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
 
     
 
