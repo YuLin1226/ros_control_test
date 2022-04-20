@@ -48,7 +48,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(_cmd);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -90,7 +90,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(_cmd);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -129,7 +129,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(_cmd);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -165,7 +165,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(_cmd);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -202,7 +202,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(_cmd);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -239,7 +239,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(_cmd);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -276,7 +276,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(_cmd);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -313,7 +313,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(_cmd);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -350,7 +350,7 @@ namespace Motor{
         p_data.push_back(this->Broadcast);
         p_data.push_back(this->FC_MasterSendCMD);
         p_data.push_back(_num);
-        p_data.push_back(this->MOTOR_ID);
+        p_data.push_back(id_);
         p_data.push_back(_cmd);
         p_data.push_back(_data_1._data_byte[1]);
         p_data.push_back(_data_1._data_byte[0]);
@@ -1345,7 +1345,7 @@ namespace Motor{
 
     }
 
-    bool MotorDriver::find_Steering_Home(std::vector<uint8_t> ID_){
+    bool MotorDriver::find_Steering_Home(uint8_t id_){
         /*
             尋 Home 應該要前、後輪分開做。
             * 1. 低速左轉：JG
@@ -1356,7 +1356,7 @@ namespace Motor{
             * 6. 歸零：CS
         */
 
-        this->JG(-85, false); // motor id 要改
+        this->JG(id_, -85, false);
         usleep(10000);
         bool io_x1_state = false;
         while (!io_x1_state)
@@ -1372,7 +1372,7 @@ namespace Motor{
             }
         }
         
-        this->JG(85, false); // motor id 要改
+        this->JG(id_, 85, false);
         usleep(10000);
         bool io_x2_state = false;
         while (!io_x2_state)
@@ -1387,9 +1387,11 @@ namespace Motor{
                 std::cerr << e.what() << '\n';
             }
         }
-        this->CMR(-20, 0, false); // index 不能用uint
+        this->JG(id_, 0, false);
         usleep(10000);
-        this->CS(0, 0, false);
+        this->CMR(id_, -20, 0, false);
+        usleep(10000);
+        this->CS(id_, 0, 0, false);
         usleep(10000);
 
         // 我覺得可以加入一個計時器，時間內沒有完成校正，就直接報錯。

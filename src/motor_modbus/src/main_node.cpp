@@ -44,12 +44,10 @@ void subCallback(const geometry_msgs::Twist msg)
 }
 
 void init_encoder(){
-    uint8_t num_ = 2;
     std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
-    std::vector<int16_t> index_({0,0});
-    std::vector<uint16_t> step_({0,0});
-    p_motor->Multi_CS(num_, steer_motor_id_, index_, step_, false);
-    usleep(50000);
+    for(auto i=0; i<steer_motor_id_.size(); i++){
+        p_motor->find_Steering_Home(steer_motor_id_[i]);
+    }
 }
 
 int main(int argc, char **argv)

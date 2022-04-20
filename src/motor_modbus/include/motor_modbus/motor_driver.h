@@ -141,7 +141,7 @@ namespace Motor
 
         void Multi_CMA(uint8_t Num_, std::vector<uint8_t> ID_, std::vector<int16_t> _Index, std::vector<uint16_t> _Step, bool is_echo);
 
-        bool find_Steering_Home(std::vector<uint8_t> ID_);
+        bool find_Steering_Home(uint8_t id_);
     };
 } // namespace Motor
 
