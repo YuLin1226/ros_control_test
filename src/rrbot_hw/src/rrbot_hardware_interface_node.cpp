@@ -11,7 +11,7 @@ int main(int argc, char** argv)
   ros::AsyncSpinner spinner(1);
   spinner.start();
 
-  rrbot_hardware_interface::RRBOTHardwareInterface rrbot1(nh);
+  rrbot_hardware_interface::RRBOTHardwareInterface rrbot(nh);
 
   // ros::spin();
   ros::waitForShutdown();

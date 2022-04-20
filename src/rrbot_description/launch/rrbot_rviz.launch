@@ -4,12 +4,13 @@
 
   <!-- send fake joint values -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-    <param name="use_gui" value="TRUE"/>
+    <!-- <param name="use_gui" value="TRUE"/> -->
+    <remap from="/joint_states" to="/rrbot/joint_states" />
   </node>
 
   <!-- Combine joint values -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
-    <!-- <remap from="/joint_states" to="/rrbot/joint_states" /> -->
+    <remap from="/joint_states" to="/rrbot/joint_states" />
   </node>
 
   <!-- Show in Rviz   -->

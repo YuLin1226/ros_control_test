@@ -56,8 +56,8 @@ namespace rrbot_hardware_interface
 			std::shared_ptr<Motor::MotorDriver> multi_drive_;
 
             hardware_interface::JointStateInterface jnt_state_interface;
-            hardware_interface::PositionJointInterface jnt_pos_interface;
-
+            // hardware_interface::PositionJointInterface jnt_pos_interface;
+			hardware_interface::EffortJointInterface jnt_pos_interface;
 			struct Joint
 			{
 				double position;
