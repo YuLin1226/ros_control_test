@@ -63,6 +63,7 @@ namespace Motor
 
         double get_Encoder();
         double get_Current(uint8_t id_);
+        double get_Voltage(uint8_t id_);
         
     private:
         const uint8_t MOTOR_ID_Lite         = 0x01; // this shouldn't be const, cuz it's different for different motors.

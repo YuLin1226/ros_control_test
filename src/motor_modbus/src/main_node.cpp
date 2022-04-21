@@ -66,8 +66,10 @@ int main(int argc, char **argv)
     // ROS 宣告
     ros::init(argc, argv, "motor_current_detection_node");
     ros::NodeHandle n;
-    ros::Publisher pub_front = n.advertise<std_msgs::Float64>("front_motor_current", 1000);
-    ros::Publisher pub_rear  = n.advertise<std_msgs::Float64>("rear_motor_current", 1000);
+    ros::Publisher pub_front_drive = n.advertise<std_msgs::Float64>("front_drive_current", 1000);
+    ros::Publisher pub_rear_drive  = n.advertise<std_msgs::Float64>("rear_drive_current", 1000);
+    ros::Publisher pub_front_steer = n.advertise<std_msgs::Float64>("front_steer_current", 1000);
+    ros::Publisher pub_rear_steer  = n.advertise<std_msgs::Float64>("rear_steer_current", 1000);
     ros::Subscriber sub = n.subscribe("cmd_key", 1000, subCallback);
     ros::Rate loop_rate(10);
 
@@ -125,15 +127,25 @@ int main(int argc, char **argv)
     {
         try
         {
-            // std_msgs::Float64 front_current_data;
-            // front_current_data.data = p_motor->get_Current(0x01);
-            // pub_front.publish(front_current_data);
-            // usleep(50000);
+            std_msgs::Float64 front_drive_current_data;
+            front_drive_current_data.data = p_motor->get_Current(0x01);
+            pub_front_drive.publish(front_drive_current_data);
+            usleep(10000);
 
-            std_msgs::Float64 rear_current_data;
-            rear_current_data.data = p_motor->get_Current(0x02);
-            pub_rear.publish(rear_current_data);
-            usleep(50000);
+            std_msgs::Float64 rear_drive_current_data;
+            rear_drive_current_data.data = p_motor->get_Current(0x02);
+            pub_rear_drive.publish(rear_drive_current_data);
+            usleep(10000);
+
+            std_msgs::Float64 front_steer_current_data;
+            front_steer_current_data.data = p_motor->get_Current(0x03);
+            pub_front_steer.publish(front_steer_current_data);
+            usleep(10000);
+
+            std_msgs::Float64 rear_steer_current_data;
+            rear_steer_current_data.data = p_motor->get_Current(0x04);
+            pub_rear_steer.publish(rear_steer_current_data);
+            usleep(10000);
 
             ros::spinOnce();
             loop_rate.sleep();

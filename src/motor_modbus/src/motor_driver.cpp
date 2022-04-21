@@ -708,6 +708,32 @@ namespace Motor{
         return current_data_;
     }
 
+    double MotorDriver::get_Voltage(uint8_t id_){
+        const int expected_bytes = 20;
+        this->NULL_Lite(true, id_);
+        std::vector<char> response;
+        {
+            usleep(RESPONSE_DELAY_US);
+            try
+            {
+                response = asyncRead(expected_bytes);
+            }
+            catch(const std::exception& e)
+            {
+                std::cerr << e.what() << '\n';
+            }
+        }
+
+        double voltage_data_;
+
+        union unionType voltage_bit_;
+        voltage_bit_._data_byte[1]    = response.at(14);
+        voltage_bit_._data_byte[0]    = response.at(15);
+        // std:: cout << "=========\n";
+        // std:: cout << std::dec << encoder_index_._data << " " << encoder_step_._data <<"\n";
+        voltage_data_ = voltage_bit_._data*0.01;
+        return voltage_data_;
+    }
 
 
     // For driving Wheels.
