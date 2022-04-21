@@ -362,30 +362,30 @@ namespace Motor{
         }
         std::cout << std::endl;
 
-        if(is_echo){
+        // if(is_echo){
 
-            std::vector<char> rcv_char;
+        //     std::vector<char> rcv_char;
             
-            {
-                usleep(RESPONSE_DELAY_US);
-                try
-                {
-                    rcv_char = asyncRead(this->rcv_size);
-                }
-                catch(const std::exception& e)
-                {
-                    std::cerr << e.what() << '\n';
-                }
-                std::cout <<  "Received Data: ";
-                for(auto i=0;i<rcv_char.size();i++){            
-                    uint8_t a = rcv_char[i];
-                    std::cout << std::hex << +a << " ";
-                }
-                std::cout << std::endl;
+        //     {
+        //         usleep(RESPONSE_DELAY_US);
+        //         try
+        //         {
+        //             rcv_char = asyncRead(this->rcv_size);
+        //         }
+        //         catch(const std::exception& e)
+        //         {
+        //             std::cerr << e.what() << '\n';
+        //         }
+        //         std::cout <<  "Received Data: ";
+        //         for(auto i=0;i<rcv_char.size();i++){            
+        //             uint8_t a = rcv_char[i];
+        //             std::cout << std::hex << +a << " ";
+        //         }
+        //         std::cout << std::endl;
                 
-            }
+        //     }
 
-        }
+        // }
     }
 
     double MotorDriver::get_Encoder(){
