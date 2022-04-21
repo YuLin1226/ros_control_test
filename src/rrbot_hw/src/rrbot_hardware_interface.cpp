@@ -24,11 +24,12 @@ namespace rrbot_hardware_interface
 		init();
 		std::cout << "\n\ninit RRBOT HW...\n\n";
 		controller_manager_.reset(new controller_manager::ControllerManager(this, nh_));
-		nh_.param("/rrbot/hardware_interface/loop_hz", loop_hz_, 10.0);
+		nh_.param("/rrbot/hardware_interface/loop_hz", loop_hz_, 1.0);
 		ROS_DEBUG_STREAM_NAMED("constructor","Using loop freqency of " << loop_hz_ << " hz");
 		ros::Duration update_freq = ros::Duration(1.0/loop_hz_);
 		non_realtime_loop_ = nh_.createTimer(update_freq, &RRBOTHardwareInterface::update, this);
 		ROS_INFO_NAMED("hardware_interface", "Loaded generic_hardware_interface.");
+		zero_encoder();
 	}
     
     RRBOTHardwareInterface::~RRBOTHardwareInterface()
@@ -54,10 +55,14 @@ namespace rrbot_hardware_interface
 	{
 		multi_drive_ = std::make_shared<Motor::MotorDriver>(port_name, baud_rate);
 		multi_drive_->open();
+	}
+	
+	void RRBOTHardwareInterface::zero_encoder(){
+		multi_drive_->ISTOP(false);
+		usleep(10000);
 		multi_drive_->CS(0, 0, false);
 		usleep(10000);
 	}
-	
 
     void RRBOTHardwareInterface::update(const ros::TimerEvent& e)
 	{
@@ -84,10 +89,10 @@ namespace rrbot_hardware_interface
 		double cmd_pos	= joints_.position_command/(2.0*M_PI);
 		uint16_t _index = cmd_pos;
 		uint16_t _step 	= (cmd_pos - _index)*10000;
-
+		std::cout << std::dec <<"command: " << joints_.position_command << std::endl;
 		std::cout << std::hex <<"command_index: " << _index << "\ncommand_step: " << _step << std::endl;
 
-		multi_drive_->CMA(_index, _step, false);
+		// multi_drive_->CMA(_index, _step, false);
 		usleep(10000);
 	}
 

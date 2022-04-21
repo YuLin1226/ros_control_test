@@ -55,6 +55,7 @@ namespace rrbot_hardware_interface
 
         private:
 			void serial_setup(std::string port_name, int baud_rate);
+			void zero_encoder();
 			std::shared_ptr<Motor::MotorDriver> multi_drive_;
 
             hardware_interface::JointStateInterface jnt_state_interface;
