@@ -10,17 +10,19 @@ std::shared_ptr<Motor::MotorDriver> p_motor = std::make_shared<Motor::MotorDrive
 void subCallback(const geometry_msgs::Twist msg)
 {
     uint8_t num_ = 2;
+    const int steer_pos = 5;
+    const int drive_vel = 200;
     std::vector<uint8_t> drive_motor_id_({0x01, 0x02});
     std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
     std::vector<int16_t> cmd_rpm_;
     std::vector<int16_t> index_;
     std::vector<uint16_t> step_;
     if (msg.linear.y < 0){
-        index_ = {5, 5};
+        index_ = {steer_pos, steer_pos};
         step_ = {0, 0};
     }
     else if (msg.linear.y > 0){
-        index_ = {-5, -5};
+        index_ = {-steer_pos, -steer_pos};
         step_ = {0, 0};
     }
     else{
@@ -31,10 +33,10 @@ void subCallback(const geometry_msgs::Twist msg)
     usleep(50000);
     
     if(msg.linear.x > 0){
-        cmd_rpm_ = {-100, -100};
+        cmd_rpm_ = {-drive_vel, -drive_vel};
     }
     else if(msg.linear.x < 0){
-        cmd_rpm_ = {100, 100};
+        cmd_rpm_ = {drive_vel, drive_vel};
     }
     else{
         cmd_rpm_ = {0, 0};
@@ -43,21 +45,27 @@ void subCallback(const geometry_msgs::Twist msg)
     usleep(50000);
 }
 
-void init_encoder(){
+void init_encoder(bool is_find_home){
     
-    /* 尋home待測試 */
-    std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
-    for(auto i=0; i<steer_motor_id_.size(); i++){
-        p_motor->find_Steering_Home(steer_motor_id_[i]);
+    if(is_find_home){
+        /* 使用尋home */
+        std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
+        for(auto i=0; i<steer_motor_id_.size(); i++){
+            p_motor->find_Steering_Home(steer_motor_id_[i]);
+            std::cout << "Steer Motor ID." << (uint16_t)steer_motor_id_[i] << " found home.\n";
+        }
+        std::cout << "Steering Motor Find Home Finished.\n";
+    }
+    else{
+        /* 不使用尋home */
+        uint8_t num_ = 2;
+        std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
+        std::vector<int16_t> index_({0,0});
+        std::vector<uint16_t> step_({0,0});
+        p_motor->Multi_CS(num_, steer_motor_id_, index_, step_, false);
+        usleep(10000);
     }
 
-    /* 未完成尋home用這邊 */
-    // uint8_t num_ = 2;
-    // std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
-    // std::vector<int16_t> index_({0,0});
-    // std::vector<uint16_t> step_({0,0});
-    // p_motor->Multi_CS(num_, steer_motor_id_, index_, step_, false);
-    // usleep(10000);
 
 }
 
@@ -75,7 +83,7 @@ int main(int argc, char **argv)
 
     // Modbus 宣告
     p_motor->open();
-    init_encoder();
+    init_encoder(true);
     
 
     /*  ===============

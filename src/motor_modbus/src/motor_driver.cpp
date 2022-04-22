@@ -1383,7 +1383,8 @@ namespace Motor{
         */
 
         const int expected_bytes = 20;
-        this->JG(id_, -85, false);
+        int rpm = 300;
+        this->JG(id_, -rpm, false);
         usleep(10000);
         bool io_x1_state = false;
         while (!io_x1_state)
@@ -1409,7 +1410,7 @@ namespace Motor{
                 union unionType io_state;
                 // io_state._data_byte[1] = response.at(12);
                 io_state._data_byte[0] = response.at(13);
-                io_x1_state = (io_state._data_byte[0]>>2)&1;
+                io_x1_state = (io_state._data_byte[0]>>1)&1;
                 usleep(10000);
             }
             catch(const std::exception& e)
@@ -1418,7 +1419,7 @@ namespace Motor{
             }
         }
         
-        this->JG(id_, 85, false);
+        this->JG(id_, rpm, false);
         usleep(10000);
         bool io_x2_state = false;
         while (!io_x2_state)
@@ -1442,7 +1443,7 @@ namespace Motor{
                 union unionType io_state;
                 // io_state._data_byte[1] = response.at(12);
                 io_state._data_byte[0] = response.at(13);
-                io_x2_state = (io_state._data_byte[0]>>2)&1;
+                io_x2_state = (io_state._data_byte[0])&1;
                 usleep(10000);
             }
             catch(const std::exception& e)
