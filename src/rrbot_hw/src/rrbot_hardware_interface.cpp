@@ -41,7 +41,7 @@ namespace rrbot_hardware_interface
 	{
 		serial_setup("/dev/ttyUSB0", 115200);
         
-	   	hardware_interface::JointStateHandle state_handle_a("joint1", &joints_.position_command, &joints_.velocity_command, &joints_.effort_command);
+	   	hardware_interface::JointStateHandle state_handle_a("joint1", &joints_.position, &joints_.velocity, &joints_.effort);
    		jnt_state_interface.registerHandle(state_handle_a);
 		registerInterface(&jnt_state_interface);
 
@@ -91,8 +91,27 @@ namespace rrbot_hardware_interface
 		// uint16_t cmd_rpm = joints_.velocity_command;
 		// multi_drive_->JG(cmd_rpm, false);
 
-		// // 測試使用 CMR，但這個需要調pid參數。
-		// double cmd_pos	= (joints_.position_command-joints_.position)/(2.0*M_PI);
+		// 測試使用 CMR，但這個需要調pid參數。
+		double cmd_pos	= (joints_.position_command)/(2.0*M_PI);
+		int16_t _index;
+		uint16_t _step;
+		if(cmd_pos < 0){
+			_index = cmd_pos-1;
+			_step  = (cmd_pos - _index)*10000;
+		}
+		else{
+			_index = cmd_pos;
+			_step  = (cmd_pos - _index)*10000;
+		}
+		
+		std::cout << std::dec <<"command: " << joints_.position_command << std::endl;
+		std::cout << std::dec <<"command_index: " << _index << "\ncommand_step: " << _step << std::endl;
+
+		multi_drive_->CMR(_index, _step, false);
+		usleep(20000);
+
+		// // 測試使用 CMA，這個應該直接把pid設成p=1, i=d=0
+		// double cmd_pos	= (joints_.position_command)/(2.0*M_PI);
 		// int16_t _index;
 		// uint16_t _step;
 		// if(cmd_pos < 0){
@@ -107,27 +126,8 @@ namespace rrbot_hardware_interface
 		// std::cout << std::dec <<"command: " << joints_.position_command << std::endl;
 		// std::cout << std::hex <<"command_index: " << _index << "\ncommand_step: " << _step << std::endl;
 
-		// multi_drive_->CMR(_index, _step, false);
+		// multi_drive_->CMA(_index, _step, false);
 		// usleep(20000);
-
-		// 測試使用 CMA，這個應該直接把pid設成p=1, i=d=0
-		double cmd_pos	= (joints_.position_command)/(2.0*M_PI);
-		int16_t _index;
-		uint16_t _step;
-		if(cmd_pos < 0){
-			_index = cmd_pos-1;
-			_step  = (cmd_pos - _index)*10000;
-		}
-		else{
-			_index = cmd_pos;
-			_step  = (cmd_pos - _index)*10000;
-		}
-		
-		std::cout << std::dec <<"command: " << joints_.position_command << std::endl;
-		std::cout << std::hex <<"command_index: " << _index << "\ncommand_step: " << _step << std::endl;
-
-		multi_drive_->CMA(_index, _step, false);
-		usleep(20000);
 	}
 
 } // namespace
