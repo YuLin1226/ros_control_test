@@ -60,7 +60,11 @@ namespace rrbot_hardware_interface
 	void RRBOTHardwareInterface::zero_encoder(){
 		multi_drive_->ISTOP(false);
 		usleep(10000);
-		multi_drive_->CS(0, 0, false);
+		// while(multi_drive_->get_Encoder() != 0){
+		// 	multi_drive_->CS(0, 0, false);
+		// 	usleep(10000);
+		// }
+		joints_.init_position =	multi_drive_->get_Encoder();
 		usleep(10000);
 	}
 
@@ -77,23 +81,53 @@ namespace rrbot_hardware_interface
 
 	void RRBOTHardwareInterface::read()
 	{
-		joints_.position = multi_drive_->get_Encoder();	
+		joints_.position = multi_drive_->get_Encoder() - joints_.init_position;	
 		std::cout <<"position: " << joints_.position << std::endl;
-		usleep(10000);
+		usleep(20000);
 	}
 
 	void RRBOTHardwareInterface::write()
 	{
 		// uint16_t cmd_rpm = joints_.velocity_command;
 		// multi_drive_->JG(cmd_rpm, false);
-		double cmd_pos	= joints_.position_command/(2.0*M_PI);
-		uint16_t _index = cmd_pos;
-		uint16_t _step 	= (cmd_pos - _index)*10000;
+
+		// // 測試使用 CMR，但這個需要調pid參數。
+		// double cmd_pos	= (joints_.position_command-joints_.position)/(2.0*M_PI);
+		// int16_t _index;
+		// uint16_t _step;
+		// if(cmd_pos < 0){
+		// 	_index = cmd_pos-1;
+		// 	_step  = (cmd_pos - _index)*10000;
+		// }
+		// else{
+		// 	_index = cmd_pos;
+		// 	_step  = (cmd_pos - _index)*10000;
+		// }
+		
+		// std::cout << std::dec <<"command: " << joints_.position_command << std::endl;
+		// std::cout << std::hex <<"command_index: " << _index << "\ncommand_step: " << _step << std::endl;
+
+		// multi_drive_->CMR(_index, _step, false);
+		// usleep(20000);
+
+		// 測試使用 CMA，這個應該直接把pid設成p=1, i=d=0
+		double cmd_pos	= (joints_.position_command)/(2.0*M_PI);
+		int16_t _index;
+		uint16_t _step;
+		if(cmd_pos < 0){
+			_index = cmd_pos-1;
+			_step  = (cmd_pos - _index)*10000;
+		}
+		else{
+			_index = cmd_pos;
+			_step  = (cmd_pos - _index)*10000;
+		}
+		
 		std::cout << std::dec <<"command: " << joints_.position_command << std::endl;
 		std::cout << std::hex <<"command_index: " << _index << "\ncommand_step: " << _step << std::endl;
 
-		// multi_drive_->CMA(_index, _step, false);
-		usleep(10000);
+		multi_drive_->CMA(_index, _step, false);
+		usleep(20000);
 	}
 
 } // namespace

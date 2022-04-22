@@ -8,7 +8,7 @@ rrbot:
   joint1_position_controller:
     type: effort_controllers/JointPositionController
     joint: joint1
-    pid: {p: 0.5, i: 0.0, d: 0.0}
+    pid: {p: 1.0, i: 0.0, d: 0.0}
 
   hardware_interface:
     loop_hz: 1.0

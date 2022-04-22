@@ -253,7 +253,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::CMR(uint16_t _index, uint16_t _step, bool is_echo = false){
+    void MotorDriver::CMR(int16_t _index, uint16_t _step, bool is_echo = false){
         
         /* ==============================================================================
             * If echo, receive 8 bytes data per message.
@@ -290,7 +290,7 @@ namespace Motor{
 
     }
 
-    void MotorDriver::CMA(uint16_t _index, uint16_t _step, bool is_echo = false){
+    void MotorDriver::CMA(int16_t _index, uint16_t _step, bool is_echo = false){
         
         /* ==============================================================================
             * If echo, receive 8 bytes data per message.

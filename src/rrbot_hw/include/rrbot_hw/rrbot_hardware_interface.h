@@ -63,6 +63,7 @@ namespace rrbot_hardware_interface
 			hardware_interface::EffortJointInterface jnt_pos_interface;
 			struct Joint
 			{
+				double init_position;
 				double position;
 				double velocity;
 				double effort;
