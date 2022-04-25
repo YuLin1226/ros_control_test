@@ -7,6 +7,81 @@
 
 std::shared_ptr<Motor::MotorDriver> p_motor = std::make_shared<Motor::MotorDriver>("/dev/ttyUSB0", 115200);
 
+
+void subCallback_kinematic(const geometry_msgs::Twist cmd)
+{
+    double D = 1;
+    double radius = 0.1;
+    int gear_retio = 24;
+
+    double v_x = cmd.linear.x;
+    double v_y = cmd.linear.y;
+    double w   = cmd.angular.z;
+
+    double v1x = v_x;
+    double v1y = v_y + w*D/2;
+    double v2x = v_x;
+    double v2y = v_y - w*D/2;
+
+    double v_1 = std::sqrt(v1x*v1x+v1y*v1y);
+    double v_2 = std::sqrt(v2x*v2x+v2y*v2y);
+    double theta_1 = std::atan2(v1y, v1x);
+    double theta_2 = std::atan2(v2y, v2x);
+
+    if(theta_1 > M_PI/2){
+        theta_1 -= M_PI;
+        v_1 *= -1;
+    }
+    else if(theta_1 < -M_PI/2){
+        theta_1 += M_PI;
+        v_1 *= -1;
+    }
+
+    if(theta_2 > M_PI/2){
+        theta_2 -= M_PI;
+        v_2 *= -1;
+    }
+    else if(theta_2 < -M_PI/2){
+        theta_2 += M_PI;
+        v_2 *= -1;
+    }
+
+    uint8_t num_ = 2;
+    int16_t front_rpm = v_1*gear_retio/radius;
+    int16_t rear_rpm  = v_2*gear_retio/radius;
+    double front_steer_pos = theta_1/(2.0*M_PI);
+    double rear_steer_pos  = theta_2/(2.0*M_PI);
+    int16_t  front_index, rear_index;
+    uint16_t front_step,  rear_step;
+    if(front_steer_pos < 0){
+        front_index = front_steer_pos-1;
+        front_step  = (front_steer_pos - front_index)*10000;
+    }
+    else{
+        front_index = front_steer_pos;
+        front_step  = (front_steer_pos - front_index)*10000;
+    }
+
+    if(rear_steer_pos < 0){
+        rear_index = rear_steer_pos-1;
+        rear_step  = (rear_steer_pos - rear_index)*10000;
+    }
+    else{
+        rear_index = rear_steer_pos;
+        rear_step  = (rear_steer_pos - rear_index)*10000;
+    }
+    std::vector<uint8_t> drive_motor_id_({0x01, 0x02});
+    std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
+    std::vector<int16_t> cmd_rpm_({front_rpm, rear_rpm});
+    std::vector<int16_t> index_({front_index, rear_index});
+    std::vector<uint16_t> step_({front_step, rear_step});
+
+    p_motor->Multi_CMR(num_, steer_motor_id_, index_, step_, false);
+    usleep(10000);
+    p_motor->Multi_JG_Lite(num_, drive_motor_id_, cmd_rpm_, false);
+    usleep(10000);
+}
+
 void subCallback(const geometry_msgs::Twist msg)
 {
     uint8_t num_ = 2;
