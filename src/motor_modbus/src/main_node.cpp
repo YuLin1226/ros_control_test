@@ -8,11 +8,21 @@
 std::shared_ptr<Motor::MotorDriver> p_motor = std::make_shared<Motor::MotorDriver>("/dev/ttyUSB0", 115200);
 
 
+double v_limit(double v, double v_up_bound, double v_low_bound){
+    if(v > v_up_bound) v = v_up_bound;
+
+    if(v < v_low_bound) v = v_low_bound;
+
+    return v;
+}
+
+
 void subCallback_kinematic(const geometry_msgs::Twist cmd)
 {
-    double D = 1;
+    double D = 1.35;
     double radius = 0.1;
     int gear_retio = 24;
+    int steer_ratio = 350;
 
     double v_x = cmd.linear.x;
     double v_y = cmd.linear.y;
@@ -27,6 +37,13 @@ void subCallback_kinematic(const geometry_msgs::Twist cmd)
     double v_2 = std::sqrt(v2x*v2x+v2y*v2y);
     double theta_1 = std::atan2(v1y, v1x);
     double theta_2 = std::atan2(v2y, v2x);
+
+    double v_upper_bound = 500.0;
+    double v_lower_bound = 0.0;
+
+    v_1 = v_limit(v_1, v_upper_bound, v_lower_bound);
+    v_2 = v_limit(v_2, v_upper_bound, v_lower_bound);
+
 
     if(theta_1 > M_PI/2){
         theta_1 -= M_PI;
@@ -46,11 +63,18 @@ void subCallback_kinematic(const geometry_msgs::Twist cmd)
         v_2 *= -1;
     }
 
+
     uint8_t num_ = 2;
     int16_t front_rpm = v_1*gear_retio/radius;
     int16_t rear_rpm  = v_2*gear_retio/radius;
-    double front_steer_pos = theta_1/(2.0*M_PI);
-    double rear_steer_pos  = theta_2/(2.0*M_PI);
+
+    
+    double front_steer_pos = theta_1*steer_ratio/(2.0*M_PI);
+    double rear_steer_pos  = theta_2*steer_ratio/(2.0*M_PI);
+    
+    std::cout << "VEL: (" << front_rpm << " , " << rear_rpm << ")\n";
+    std::cout << "POS: (" << front_steer_pos << " , " << rear_steer_pos << ")\n";
+    
     int16_t  front_index, rear_index;
     uint16_t front_step,  rear_step;
     if(front_steer_pos < 0){
@@ -76,7 +100,7 @@ void subCallback_kinematic(const geometry_msgs::Twist cmd)
     std::vector<int16_t> index_({front_index, rear_index});
     std::vector<uint16_t> step_({front_step, rear_step});
 
-    p_motor->Multi_CMR(num_, steer_motor_id_, index_, step_, false);
+    p_motor->Multi_CMA(num_, steer_motor_id_, index_, step_, false);
     usleep(10000);
     p_motor->Multi_JG_Lite(num_, drive_motor_id_, cmd_rpm_, false);
     usleep(10000);
@@ -86,7 +110,7 @@ void subCallback(const geometry_msgs::Twist msg)
 {
     uint8_t num_ = 2;
     const int steer_pos = 5;
-    const int drive_vel = 200;
+    const int drive_vel = 500;
     std::vector<uint8_t> drive_motor_id_({0x01, 0x02});
     std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
     std::vector<int16_t> cmd_rpm_;
@@ -153,12 +177,13 @@ int main(int argc, char **argv)
     ros::Publisher pub_rear_drive  = n.advertise<std_msgs::Float64>("rear_drive_current", 1000);
     ros::Publisher pub_front_steer = n.advertise<std_msgs::Float64>("front_steer_current", 1000);
     ros::Publisher pub_rear_steer  = n.advertise<std_msgs::Float64>("rear_steer_current", 1000);
-    ros::Subscriber sub = n.subscribe("cmd_key", 1000, subCallback);
+    // ros::Subscriber sub = n.subscribe("cmd_key", 1000, subCallback);
+    ros::Subscriber sub = n.subscribe("cmd_vel", 1000, subCallback_kinematic);
     ros::Rate loop_rate(10);
 
     // Modbus 宣告
     p_motor->open();
-    init_encoder(true);
+    init_encoder(false);
     
 
     /*  ===============
