@@ -173,17 +173,47 @@ int main(int argc, char **argv)
     // ROS 宣告
     ros::init(argc, argv, "motor_current_detection_node");
     ros::NodeHandle n;
-    ros::Publisher pub_front_drive = n.advertise<std_msgs::Float64>("front_drive_current", 1000);
-    ros::Publisher pub_rear_drive  = n.advertise<std_msgs::Float64>("rear_drive_current", 1000);
-    ros::Publisher pub_front_steer = n.advertise<std_msgs::Float64>("front_steer_current", 1000);
-    ros::Publisher pub_rear_steer  = n.advertise<std_msgs::Float64>("rear_steer_current", 1000);
-    // ros::Subscriber sub = n.subscribe("cmd_key", 1000, subCallback);
-    ros::Subscriber sub = n.subscribe("cmd_vel", 1000, subCallback_kinematic);
+    ros::Subscriber sub;
+    ros::Publisher pub_front_drive;
+    ros::Publisher pub_rear_drive;
+    ros::Publisher pub_front_steer;
+    ros::Publisher pub_rear_steer;
+
+    bool isFindHome;
+    bool isPubCurrent;
+    bool isUseModbus;
+    int subMode;
+    n.param<bool>("/dsr/isFindHome"   , isFindHome, true);
+    n.param<bool>("/dsr/isPubCurrent" , isPubCurrent, true);
+    n.param<int>("/dsr/subMode", subMode, 1);
+
+
+
+    if(isPubCurrent)
+    {
+        pub_front_drive = n.advertise<std_msgs::Float64>("front_drive_current", 1000);
+        pub_rear_drive  = n.advertise<std_msgs::Float64>("rear_drive_current", 1000);
+        pub_front_steer = n.advertise<std_msgs::Float64>("front_steer_current", 1000);
+        pub_rear_steer  = n.advertise<std_msgs::Float64>("rear_steer_current", 1000);
+    }
+    
+    if(isUseModbus){
+        if(subMode == 1){
+            sub = n.subscribe("cmd_key", 1000, subCallback);
+        }
+        else if(subMode == 2){
+            sub = n.subscribe("cmd_vel", 1000, subCallback_kinematic);
+        }
+    }
+    
     ros::Rate loop_rate(10);
+    
 
     // Modbus 宣告
-    p_motor->open();
-    init_encoder(false);
+    if(isUseModbus){
+        p_motor->open();
+        init_encoder(isFindHome);
+    }
     
 
     /*  ===============
@@ -235,25 +265,27 @@ int main(int argc, char **argv)
     {
         try
         {
-            std_msgs::Float64 front_drive_current_data;
-            front_drive_current_data.data = p_motor->get_Current(0x01);
-            pub_front_drive.publish(front_drive_current_data);
-            usleep(10000);
+            if(isPubCurrent && isUseModbus){
+                std_msgs::Float64 front_drive_current_data;
+                front_drive_current_data.data = p_motor->get_Current(0x01);
+                pub_front_drive.publish(front_drive_current_data);
+                usleep(10000);
 
-            std_msgs::Float64 rear_drive_current_data;
-            rear_drive_current_data.data = p_motor->get_Current(0x02);
-            pub_rear_drive.publish(rear_drive_current_data);
-            usleep(10000);
+                std_msgs::Float64 rear_drive_current_data;
+                rear_drive_current_data.data = p_motor->get_Current(0x02);
+                pub_rear_drive.publish(rear_drive_current_data);
+                usleep(10000);
 
-            std_msgs::Float64 front_steer_current_data;
-            front_steer_current_data.data = p_motor->get_Current(0x03);
-            pub_front_steer.publish(front_steer_current_data);
-            usleep(10000);
+                std_msgs::Float64 front_steer_current_data;
+                front_steer_current_data.data = p_motor->get_Current(0x03);
+                pub_front_steer.publish(front_steer_current_data);
+                usleep(10000);
 
-            std_msgs::Float64 rear_steer_current_data;
-            rear_steer_current_data.data = p_motor->get_Current(0x04);
-            pub_rear_steer.publish(rear_steer_current_data);
-            usleep(10000);
+                std_msgs::Float64 rear_steer_current_data;
+                rear_steer_current_data.data = p_motor->get_Current(0x04);
+                pub_rear_steer.publish(rear_steer_current_data);
+                usleep(10000);
+            }
 
             ros::spinOnce();
             loop_rate.sleep();

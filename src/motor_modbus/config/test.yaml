@@ -1,0 +1,9 @@
+dsr:
+
+  isFindHome: false
+  isUseModbus: false
+  isPubCurrent: false
+  
+  # cmd_vel: 1
+  # cmd_key: 2
+  subMode: 1

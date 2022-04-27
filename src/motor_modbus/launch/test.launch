@@ -1,0 +1,8 @@
+<launch>
+
+    <rosparam file="$(find motor_modbus)/config/test.yaml" command="load"/>
+    <node   name="motor_current_detection_node" 
+            pkg="motor_modbus" 
+            type="motor_modbus_node"/>
+    
+</launch>
