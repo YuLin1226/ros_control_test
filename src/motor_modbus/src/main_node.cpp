@@ -94,7 +94,7 @@ void subCallback_kinematic(const geometry_msgs::Twist cmd)
         rear_index = rear_steer_pos;
         rear_step  = (rear_steer_pos - rear_index)*10000;
     }
-    std::vector<uint8_t> drive_motor_id_({0x01, 0x02});
+    std::vector<uint8_t> drive_motor_id_({0x02, 0x01});
     std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
     std::vector<int16_t> cmd_rpm_({front_rpm, rear_rpm});
     std::vector<int16_t> index_({front_index, rear_index});
@@ -111,7 +111,7 @@ void subCallback(const geometry_msgs::Twist msg)
     uint8_t num_ = 2;
     const int steer_pos = 5;
     const int drive_vel = 500;
-    std::vector<uint8_t> drive_motor_id_({0x01, 0x02});
+    std::vector<uint8_t> drive_motor_id_({0x02, 0x01});
     std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
     std::vector<int16_t> cmd_rpm_;
     std::vector<int16_t> index_;
@@ -185,6 +185,7 @@ int main(int argc, char **argv)
     int subMode;
     n.param<bool>("/dsr/isFindHome"   , isFindHome, true);
     n.param<bool>("/dsr/isPubCurrent" , isPubCurrent, true);
+    n.param<bool>("/dsr/isUseModbus" , isUseModbus, true);
     n.param<int>("/dsr/subMode", subMode, 1);
 
 

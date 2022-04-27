@@ -1,9 +1,9 @@
 dsr:
 
   isFindHome: false
-  isUseModbus: false
-  isPubCurrent: false
+  isUseModbus: true
+  isPubCurrent: true
   
-  # cmd_vel: 1
-  # cmd_key: 2
+  # cmd_key: 1
+  # cmd_vel: 2
   subMode: 1
