@@ -109,7 +109,8 @@ void subCallback_kinematic(const geometry_msgs::Twist cmd)
 void subCallback(const geometry_msgs::Twist msg)
 {
     uint8_t num_ = 2;
-    const int steer_pos = 5;
+    const int steer_idx = 5;
+    const int steer_stp = 0;
     const int drive_vel = 500;
     std::vector<uint8_t> drive_motor_id_({0x02, 0x01});
     std::vector<uint8_t> steer_motor_id_({0x03, 0x04});
@@ -117,12 +118,12 @@ void subCallback(const geometry_msgs::Twist msg)
     std::vector<int16_t> index_;
     std::vector<uint16_t> step_;
     if (msg.linear.y < 0){
-        index_ = {steer_pos, steer_pos};
-        step_ = {0, 0};
+        index_ = {steer_idx, steer_idx};
+        step_ = {steer_stp, steer_stp};
     }
     else if (msg.linear.y > 0){
-        index_ = {-steer_pos, -steer_pos};
-        step_ = {0, 0};
+        index_ = {-steer_idx, -steer_idx};
+        step_ = {steer_stp, steer_stp};
     }
     else{
         index_ = {0,0};

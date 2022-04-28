@@ -1384,7 +1384,7 @@ namespace Motor{
 
         const int expected_bytes = 20;
         int rpm = 300;
-        this->JG(id_, -rpm, false);
+        this->JG(id_, rpm, false);
         usleep(10000);
         bool io_x1_state = false;
         while (!io_x1_state)
@@ -1419,7 +1419,7 @@ namespace Motor{
             }
         }
         
-        this->JG(id_, rpm, false);
+        this->JG(id_, -rpm, false);
         usleep(10000);
         bool io_x2_state = false;
         while (!io_x2_state)
@@ -1453,7 +1453,7 @@ namespace Motor{
         }
         this->JG(id_, 0, false);
         usleep(10000);
-        this->CMR(id_, -20, 0, false);
+        this->CMR(id_, 20, 0, false);
         usleep(10000);
         this->CS(id_, 0, 0, false);
         usleep(10000);
